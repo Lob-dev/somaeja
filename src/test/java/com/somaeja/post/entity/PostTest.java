@@ -1,15 +1,10 @@
 package com.somaeja.post.entity;
 
-import com.somaeja.location.entity.Location;
-import com.somaeja.user.entity.User;
-import org.apache.ibatis.annotations.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,29 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PostTest {
 
-	private List<String> images;
-
-	@Mock
-	private Location location;
-
-	@Mock
-	private User user;
-
-	@BeforeEach
-	void initialPost(){
-		// Given
-		images = new ArrayList<>();
-			images.add("image1");
-			images.add("image2");
-			images.add("image3");
-	}
-
 	@Test
 	@DisplayName("Post Constructor Test")
 	void createConstructorAndPost(){
 		// Given
 		Post post = Post.builder().build();
-
 		// Then
 		assertNotNull(post);
 	}
@@ -54,28 +31,30 @@ class PostTest {
 		LocalDateTime createTime = LocalDateTime.now();
 
 		Post post = Post.builder()
-			.id(1)
+			.id(1L)
 			.title("title")
 			.content("content")
-			.price(10_000)
-			.images(images)
+			.price(10_000L)
 			.createdDate(createTime)
 			.modifyDate(createTime)
 			.offerStatus(OfferStatus.YES)
 			.tradeStatus(TradeStatus.OFFLINE)
+			.userId(1L)
+			.locationId(1L)
 			.build();
 
 		// Then
 		assertAll(
-			() -> assertEquals(1, post.getId()),
+			() -> assertEquals(Long.valueOf(1), post.getId()),
 			() -> assertEquals("title", post.getTitle()),
 			() -> assertEquals("content", post.getContent()),
-			() -> assertEquals(10_000, post.getPrice()),
-			() -> assertEquals(images, post.getImages()),
+			() -> assertEquals(Long.valueOf(10_000), post.getPrice()),
 			() -> assertEquals(createTime, post.getCreatedDate()),
 			() -> assertEquals(createTime, post.getModifyDate()),
 			() -> assertEquals(OfferStatus.YES, post.getOfferStatus()),
-			() -> assertEquals(TradeStatus.OFFLINE, post.getTradeStatus())
+			() -> assertEquals(TradeStatus.OFFLINE, post.getTradeStatus()),
+			() -> assertEquals(Long.valueOf(1), post.getUserId()),
+			() -> assertEquals(Long.valueOf(1), post.getLocationId())
 		);
 	}
 
@@ -85,15 +64,16 @@ class PostTest {
 		// Then
 		assertTimeout(Duration.ofMillis(30), () -> {
 			Post create = Post.builder()
-				.id(1)
+				.id(1L)
 				.title("title")
 				.content("content")
-				.price(10_000)
-				.images(images)
+				.price(10_000L)
 				.createdDate(LocalDateTime.now())
 				.modifyDate(LocalDateTime.now())
 				.offerStatus(OfferStatus.YES)
 				.tradeStatus(TradeStatus.OFFLINE)
+				.userId(1L)
+				.locationId(1L)
 				.build();
 		});
 	}

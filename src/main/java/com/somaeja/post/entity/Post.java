@@ -1,34 +1,31 @@
 package com.somaeja.post.entity;
 
-import com.somaeja.location.entity.Location;
-import com.somaeja.user.entity.User;
+import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Builder @Getter
+@Builder(access = AccessLevel.PACKAGE)
+@Getter
 public class Post {
 
-	private long id;
+	private Long id;
 	private String title;
 	private String content;
-	private long price;
+	private Long price;
 
-	private Location location;
-	private User user;
+	// User 정보
+	private Long userId;
+	// Location 정보
+	private Long locationId;
+	// Image Path 정보
+	private Long imageId;
 
 	// YES, NO
 	private OfferStatus offerStatus;
-
 	// DELIVERY, OFFLINE
 	private TradeStatus tradeStatus;
-
-	private List<String> images;
 
 	private LocalDateTime createdDate;
 	private LocalDateTime modifyDate;
