@@ -1,13 +1,9 @@
 package com.somaeja.post.entity;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,8 +33,8 @@ class PostTest {
 			.price(10_000L)
 			.createdDate(createTime)
 			.modifyDate(createTime)
-			.offerStatus(OfferStatus.YES)
-			.tradeStatus(TradeStatus.OFFLINE)
+			.isNegotiable(false)
+			.isOfflineTrade(false)
 			.userId(1L)
 			.locationId(1L)
 			.build();
@@ -51,8 +47,8 @@ class PostTest {
 			() -> assertEquals(Long.valueOf(10_000), post.getPrice()),
 			() -> assertEquals(createTime, post.getCreatedDate()),
 			() -> assertEquals(createTime, post.getModifyDate()),
-			() -> assertEquals(OfferStatus.YES, post.getOfferStatus()),
-			() -> assertEquals(TradeStatus.OFFLINE, post.getTradeStatus()),
+			() -> assertFalse(post.isNegotiable()),
+			() -> assertFalse(post.isOfflineTrade()),
 			() -> assertEquals(Long.valueOf(1), post.getUserId()),
 			() -> assertEquals(Long.valueOf(1), post.getLocationId())
 		);
@@ -70,8 +66,8 @@ class PostTest {
 				.price(10_000L)
 				.createdDate(LocalDateTime.now())
 				.modifyDate(LocalDateTime.now())
-				.offerStatus(OfferStatus.YES)
-				.tradeStatus(TradeStatus.OFFLINE)
+				.isNegotiable(false)
+				.isOfflineTrade(false)
 				.userId(1L)
 				.locationId(1L)
 				.build();
