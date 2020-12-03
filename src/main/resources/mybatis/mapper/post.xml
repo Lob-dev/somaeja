@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.somaeja.post.mapper.PostMapper">
 
-    <insert id="save" parameterType="com.somaeja.post.dto.CreatePostDto">
+    <insert id="save" parameterType="com.somaeja.post.entity.Post">
         INSERT INTO POST(USER_ID, LOCATION_ID, IMAGE, POST_TITLE, POST_CONTENT, POST_PRICE, POST_OFFERSTATUS, POST_TRADESTATUS, POST_CREATEDATE, POST_MODIFYDATE)
         VALUES (1, 1, 1, #{title}, #{content}, #{price}, #{offerStatus}, #{tradeStatus}, #{createdDate}, #{modifyDate})
     </insert>

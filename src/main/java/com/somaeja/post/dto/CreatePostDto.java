@@ -1,31 +1,28 @@
 package com.somaeja.post.dto;
 
-import com.somaeja.post.entity.OfferStatus;
-import com.somaeja.post.entity.TradeStatus;
+
 import lombok.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 
-import java.time.LocalDateTime;
-import java.util.List;
-
-@Builder
-@Getter @Setter()
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder @Getter
 public class CreatePostDto {
 
+	@NotNull @NotEmpty
 	private String title;
+
+	@NotNull @NotEmpty
 	private String content;
+
+	@NotNull @Min(0)
 	private Long price;
 
-	private Long userId;
-	private Long locationId;
-	private Long imageId;
+	@NotNull @NotEmpty
+	private String Location;
 
-	private OfferStatus offerStatus;
-	private TradeStatus tradeStatus;
-
-	private LocalDateTime createdDate;
-	private LocalDateTime modifyDate;
+	private boolean isNegotiable;
+	private boolean isOfflineTrade;
 
 }
