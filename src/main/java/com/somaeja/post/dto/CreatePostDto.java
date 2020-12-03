@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 
 @Builder @Getter
+@AllArgsConstructor @NoArgsConstructor
 public class CreatePostDto {
 
 	@NotNull @NotEmpty
@@ -20,7 +21,7 @@ public class CreatePostDto {
 	private Long price;
 
 	@NotNull @NotEmpty
-	private String Location;
+	private String location;
 
 	private boolean isNegotiable;
 	private boolean isOfflineTrade;
