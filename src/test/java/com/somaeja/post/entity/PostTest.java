@@ -2,6 +2,7 @@ package com.somaeja.post.entity;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -12,7 +13,7 @@ class PostTest {
 
 	@Test
 	@DisplayName("Post Constructor Test")
-	void createConstructorAndPost(){
+	void createConstructorAndPost() {
 		// Given
 		Post post = Post.builder().build();
 		// Then
@@ -22,7 +23,7 @@ class PostTest {
 
 	@Test
 	@DisplayName("Post Create Test")
-	void createPost(){
+	void createPost() {
 		// Given
 		LocalDateTime createTime = LocalDateTime.now();
 
@@ -56,7 +57,7 @@ class PostTest {
 
 	@Test
 	@DisplayName("Post Create Time Test")
-	void createPostAtTime(){
+	void createPostAtTime() {
 		// Then
 		assertTimeout(Duration.ofMillis(30), () -> {
 			Post create = Post.builder()

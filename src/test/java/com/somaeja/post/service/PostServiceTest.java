@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +21,7 @@ class PostServiceTest {
 	private Post post;
 
 	@BeforeEach
-	void initialPost(){
+	void initialPost() {
 		// Given
 		post = Post.builder()
 			.title("title")
@@ -38,7 +39,7 @@ class PostServiceTest {
 
 	@Test
 	@DisplayName("save Post Test")
-	void savePost(@Mock PostMapper postMapper){
+	void savePost(@Mock PostMapper postMapper) {
 		// When
 		when(postMapper.save(post)).thenReturn(1);
 		int isSave = postMapper.save(post);
