@@ -11,18 +11,18 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/post")
+@RequestMapping("/posts")
 public class PostController {
 
 	private final PostService postService;
 
 	@PostMapping
-	public ResponseEntity<String> createPost(@Valid @RequestBody CreatePostDto postDto){
+	public ResponseEntity<String> createPost(@Valid @RequestBody CreatePostDto postDto) {
 		// Image files -> Stream -> resources / static / (여기에 저장)
 
 		int isSave = postService.savePost(postDto);
 
-		if (isSave <= 0){
+		if (isSave <= 0) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("false");
 		}
 		return ResponseEntity.status(HttpStatus.OK).body("success");
