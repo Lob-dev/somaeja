@@ -3,9 +3,11 @@ package com.somaeja.post.entity;
 import com.somaeja.post.dto.CreatePostDto;
 import lombok.Builder;
 import lombok.Getter;
+
 import java.time.LocalDateTime;
 
-@Builder @Getter
+@Builder
+@Getter
 public class Post {
 
 	private Long id;
@@ -23,18 +25,4 @@ public class Post {
 	private LocalDateTime createdDate;
 	private LocalDateTime modifyDate;
 
-	public static Post from(CreatePostDto postDto, Long userId, Long locationId, Long imageId){
-		return Post.builder()
-			.title(postDto.getTitle())
-			.content(postDto.getContent())
-			.price(postDto.getPrice())
-			.userId(userId)
-			.locationId(locationId)
-			.imageId(imageId)
-			.isNegotiable(postDto.isNegotiable())
-			.isOfflineTrade(postDto.isOfflineTrade())
-			.createdDate(LocalDateTime.now())
-			.modifyDate(LocalDateTime.now())
-			.build();
-	}
 }
