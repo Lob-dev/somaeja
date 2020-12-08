@@ -3,13 +3,18 @@ package com.somaeja.post.mapper;
 import com.somaeja.post.entity.Post;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Repository
 public interface PostMapper {
 	int save(Post post);
 
-	Post findByTitle(String searchTitle);
+	List<Post> findByAll();
 
-	Post findByLocation(Long locationId);
+	List<Post> findByTitle(String searchTitle);
 
-	Post findByUser(Long userId);
+	List<Post> findByLocation(Long locationId);
+
+	List<Post> findByUser(Long userId);
 }
