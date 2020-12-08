@@ -7,4 +7,9 @@ import org.springframework.stereotype.Repository;
 public interface PostMapper {
 	int save(Post post);
 
+	Post findByTitle(String searchTitle);
+
+	Post findByLocation(Long locationId);
+
+	Post findByUser(Long userId);
 }
