@@ -3,7 +3,6 @@ package com.somaeja.post.mapper;
 import com.somaeja.post.entity.Post;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository

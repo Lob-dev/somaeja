@@ -32,8 +32,8 @@ public class CreatePostDto {
 	@NotEmpty
 	private String location;
 
-	private Boolean isNegotiable;
-	private Boolean isOfflineTrade;
+	private boolean isNegotiable;
+	private boolean isOfflineTrade;
 
 	public Post toEntity(Long userId, Long locationId, Long imageId) {
 		return Post.builder()
