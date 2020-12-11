@@ -2,10 +2,101 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.somaeja.post.mapper.PostMapper">
 
-    <insert id="save" parameterType="com.somaeja.post.entity.Post">
-        INSERT INTO POST(USER_ID, LOCATION_ID, IMAGE, POST_TITLE, POST_CONTENT, POST_PRICE, POST_OFFERSTATUS, POST_TRADESTATUS, POST_CREATEDATE, POST_MODIFYDATE)
-        VALUES (#{userId}, #{locationId}, #{imageId}, #{title}, #{content}, #{price}, #{offerStatus}, #{tradeStatus}, #{createdDate}, #{modifyDate})
+    <insert id="save" parameterType="com.somaeja.post.entity.Post" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO POST
+        (
+            USER_ID,
+            LOCATION_ID,
+            IMAGE_ID,
+            TITLE,
+            CONTENT,
+            PRICE,
+            ISNEGOTIABLE,
+            ISDIRECTTRADE,
+            CREATEDATE,
+            MODIFYDATE
+        )
+        VALUES
+        (
+            #{userId},
+            #{locationId},
+            #{imageId},
+            #{title},
+            #{content},
+            #{price},
+            #{isNegotiable},
+            #{isOfflineTrade},
+            #{createdDate},
+            #{modifyDate}
+        )
     </insert>
+
+    <select id="findByAll" resultType="com.somaeja.post.entity.Post">
+        SELECT
+            POST_ID,
+            USER_ID,
+            LOCATION_ID,
+            IMAGE_ID,
+            TITLE,
+            CONTENT,
+            PRICE,
+            ISNEGOTIABLE,
+            ISDIRECTTRADE,
+            CREATEDATE,
+            MODIFYDATE
+        FROM POST
+    </select>
+
+    <select id="findByTitle" resultType="com.somaeja.post.entity.Post" parameterType="string">
+        SELECT
+            POST_ID,
+            USER_ID,
+            LOCATION_ID,
+            IMAGE_ID,
+            TITLE,
+            CONTENT,
+            PRICE,
+            ISNEGOTIABLE,
+            ISDIRECTTRADE,
+            CREATEDATE,
+            MODIFYDATE
+        FROM POST
+        WHERE TITLE LIKE CONCAT('%',#{searchTitle},'%')
+    </select>
+
+    <select id="findByLocation" resultType="com.somaeja.post.entity.Post" parameterType="long">
+        SELECT
+            POST_ID,
+            USER_ID,
+            LOCATION_ID,
+            IMAGE_ID,
+            TITLE,
+            CONTENT,
+            PRICE,
+            ISNEGOTIABLE,
+            ISDIRECTTRADE,
+            CREATEDATE,
+            MODIFYDATE
+        FROM POST
+        WHERE LOCATION_ID = #{locationId}
+    </select>
+
+    <select id="findByUser" resultType="com.somaeja.post.entity.Post" parameterType="long">
+        select
+            POST_ID,
+            USER_ID,
+            LOCATION_ID,
+            IMAGE_ID,
+            TITLE,
+            CONTENT,
+            PRICE,
+            ISNEGOTIABLE,
+            ISDIRECTTRADE,
+            CREATEDATE,
+            MODIFYDATE
+        FROM POST
+        WHERE USER_ID = #{userId}
+    </select>
 
 </mapper>
 
