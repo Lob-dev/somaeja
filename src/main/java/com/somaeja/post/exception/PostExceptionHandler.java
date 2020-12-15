@@ -18,4 +18,11 @@ public class PostExceptionHandler {
 		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
+	// Post Exception Handler
+	@ExceptionHandler(NoSuchPostException.class)
+	protected ResponseEntity<ErrorResponse> handleNoSuchPostException(NoSuchPostException exception){
+		final ErrorResponse response = ErrorResponse.from(exception.getMessage(), null);
+		return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+	}
+
 }
