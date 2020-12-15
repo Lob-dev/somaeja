@@ -2,7 +2,9 @@ package com.somaeja.post.service;
 
 import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.FindPostDto;
+import com.somaeja.post.dto.ModifyPostDto;
 import com.somaeja.post.entity.Post;
+import com.somaeja.post.exception.NoSuchPostException;
 import com.somaeja.post.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,8 +32,8 @@ public class PostService {
 		long imageId = 1;
 		Post savePost = createDto.toEntity(userId, locationId, imageId);
 
-		int save = postMapper.save(savePost);
-		if (save < 1){
+		int hasSave = postMapper.save(savePost);
+		if (hasSave < 1) {
 			// controller advice 에서 catch..? -> internal Server Error
 			throw new RuntimeException("Save post fails");
 		}
@@ -63,8 +65,38 @@ public class PostService {
 
 	// Post Delete
 
+	public int deletePost(Long postId) {
+		int hasDelete = postMapper.deletePost(postId);
+		if (hasDelete <= 0) {
+			throw new NoSuchPostException("delete post fail :: ID = " + postId);
+		}
+		return hasDelete;
+	}
 
 	// Post Modify
+
+	public Post modifyPost(Long postId, ModifyPostDto modifyPostDto) {
+		String location = modifyPostDto.getLocation();
+		// Long locationId = locationMapper.findLocation(loacation);
+		Long locationId = 1L;
+
+		String imageName = modifyPostDto.getImageName();
+		// Long imageId = imageMapper.findImage(imageName);
+		Long imageId = 1L;
+
+		Post modifyPost = modifyPostDto.toEntity(postId, locationId, imageId);
+
+		int hasModify = postMapper.modifyPost(modifyPost);
+
+		if (hasModify <= 0) {
+			throw new NoSuchPostException(
+				"modify post fail :: ID = " + postId + " :: TITLE = "
+					+ modifyPostDto.getTitle()
+			);
+		}
+
+		return modifyPost;
+	}
 
 	private List<FindPostDto> toDtoList(List<Post> posts) {
 		List<FindPostDto> postDtoList = new ArrayList<>();

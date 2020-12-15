@@ -1,5 +1,6 @@
 package com.somaeja.post.mapper;
 
+import com.somaeja.post.dto.ModifyPostDto;
 import com.somaeja.post.entity.Post;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,8 @@ public interface PostMapper {
 	List<Post> findByLocation(Long locationId);
 
 	List<Post> findByUser(Long userId);
+
+	int deletePost(Long postId);
+
+	int modifyPost(Post modifyPost);
 }

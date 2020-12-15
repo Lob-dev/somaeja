@@ -82,7 +82,7 @@
     </select>
 
     <select id="findByUser" resultType="com.somaeja.post.entity.Post" parameterType="long">
-        select
+        SELECT
             POST_ID,
             USER_ID,
             LOCATION_ID,
@@ -97,6 +97,22 @@
         FROM POST
         WHERE USER_ID = #{userId}
     </select>
+
+    <delete id="deletePost" parameterType="long">
+        DELETE FROM POST WHERE POST_ID = #{postId}
+    </delete>
+
+    <update id="modifyPost" parameterType="com.somaeja.post.entity.Post">
+        UPDATE POST SET
+            LOCATION_ID = #{locationId},
+            IMAGE_ID = #{imageId},
+            TITLE = #{title},
+            CONTENT = #{content},
+            PRICE = #{price},
+            ISNEGOTIABLE = #{isNegotiable},
+            ISDIRECTTRADE = #{isOfflineTrade}
+        WHERE POST_ID = #{id}
+    </update>
 
 </mapper>
 
