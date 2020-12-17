@@ -1,12 +1,11 @@
 package com.somaeja.post.controller;
 
+import com.somaeja.post.controller.response.PostInfo;
 import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.FindPostDto;
 import com.somaeja.post.dto.ModifyPostDto;
 import com.somaeja.post.entity.Post;
 import com.somaeja.post.service.PostService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,16 +77,5 @@ public class PostController {
 	public ResponseEntity<PostInfo> modifyPost(@PathVariable Long postId, @Valid @RequestBody ModifyPostDto modifyPostDto){
 		Post modifyPost = postService.modifyPost(postId, modifyPostDto);
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(modifyPost.getId(), "post updated!"));
-	}
-
-	@Getter
-	@AllArgsConstructor
-	private static class PostInfo {
-		private Long postId;
-		private String message;
-
-		private static PostInfo from(Long id, String message) {
-			return new PostInfo(id, message);
-		}
 	}
 }
