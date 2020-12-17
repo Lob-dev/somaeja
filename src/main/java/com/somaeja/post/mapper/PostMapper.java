@@ -1,6 +1,5 @@
 package com.somaeja.post.mapper;
 
-import com.somaeja.post.dto.ModifyPostDto;
 import com.somaeja.post.entity.Post;
 import org.springframework.stereotype.Repository;
 
@@ -9,6 +8,8 @@ import java.util.List;
 @Repository
 public interface PostMapper {
 	int save(Post post);
+
+	Post findOne(Long postId);
 
 	List<Post> findByAll();
 

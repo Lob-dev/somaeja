@@ -4,11 +4,14 @@ import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.FindPostDto;
 import com.somaeja.post.dto.ModifyPostDto;
 import com.somaeja.post.entity.Post;
+import com.somaeja.post.exception.ModifyPostFailedException;
 import com.somaeja.post.exception.NoSuchPostException;
+import com.somaeja.post.exception.SavePostFailedException;
 import com.somaeja.post.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +36,14 @@ public class PostService {
 		Post savePost = createDto.toEntity(userId, locationId, imageId);
 
 		int hasSave = postMapper.save(savePost);
-		if (hasSave < 1) {
-			// controller advice 에서 catch..? -> internal Server Error
-			throw new RuntimeException("Save post fails");
+		try {
+			if (hasSave < 1) {
+				// controller advice 에서 catch..? -> internal Server Error
+				throw new SavePostFailedException("Save Failed :: TITLE ="
+					+ savePost.getTitle() + " USER ID =" + userId);
+			}
+		} catch (SavePostFailedException exception) {
+			// logger.debug()...
 		}
 		return savePost;
 	}
@@ -67,7 +75,7 @@ public class PostService {
 
 	public int deletePost(Long postId) {
 		int hasDelete = postMapper.deletePost(postId);
-		if (hasDelete <= 0) {
+		if (hasDelete < 1) {
 			throw new NoSuchPostException("delete post fail :: ID = " + postId);
 		}
 		return hasDelete;
@@ -83,19 +91,19 @@ public class PostService {
 		String imageName = modifyPostDto.getImageName();
 		// Long imageId = imageMapper.findImage(imageName);
 		Long imageId = 1L;
-
-		Post modifyPost = modifyPostDto.toEntity(postId, locationId, imageId);
-
-		int hasModify = postMapper.modifyPost(modifyPost);
-
-		if (hasModify <= 0) {
-			throw new NoSuchPostException(
-				"modify post fail :: ID = " + postId + " :: TITLE = "
-					+ modifyPostDto.getTitle()
-			);
+		Post savedPost = postMapper.findOne(postId);
+		if (ObjectUtils.isEmpty(savedPost)){
+			throw new NoSuchPostException("Post Find Failed :: ID = " + postId);
 		}
 
-		return modifyPost;
+		Post updateEntity = modifyPostDto.toUpdateEntity(postId, locationId, imageId, savedPost);
+
+		int hasModify = postMapper.modifyPost(updateEntity);
+		if (hasModify < 1) {
+			throw new ModifyPostFailedException(
+				"modify post fail :: ID = " + postId + " USER ID =" + savedPost.getUserId());
+		}
+		return updateEntity;
 	}
 
 	private List<FindPostDto> toDtoList(List<Post> posts) {

@@ -1,10 +1,7 @@
 package com.somaeja.post.dto;
 
 import com.somaeja.post.entity.Post;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -40,7 +37,10 @@ public class ModifyPostDto {
 	private boolean isNegotiable;
 	private boolean isOfflineTrade;
 
-	public Post toEntity(Long postId, Long locationId, Long imageId) {
+	public Post toUpdateEntity(Long postId, Long locationId, Long imageId, Post savedEntity) {
+
+		executeVerificationOfDto(savedEntity);
+
 		return Post.builder()
 			.id(postId)
 			.title(title)
@@ -56,4 +56,15 @@ public class ModifyPostDto {
 			.build();
 	}
 
+	private void executeVerificationOfDto(Post savedEntity) {
+		if (!savedEntity.isSameTitle(title) && title.equals("")) {
+			title = savedEntity.getTitle();
+		} else if (!savedEntity.isSameContent(content) && content.equals("")) {
+			content = savedEntity.getContent();
+		} else if (!savedEntity.isSamePrice(price) && price.equals(0L)) {
+			price = savedEntity.getPrice();
+		} else if (!savedEntity.isSameUserId(userId) && userId.equals(0L)) {
+			userId = savedEntity.getUserId();
+		}
+	}
 }
