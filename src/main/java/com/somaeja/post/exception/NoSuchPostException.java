@@ -1,18 +1,10 @@
 package com.somaeja.post.exception;
 
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
+import java.util.NoSuchElementException;
 
-public class NoSuchPostException extends RuntimeException {
+public class NoSuchPostException extends NoSuchElementException {
 
-	private final String message;
-
-	public NoSuchPostException(String message) {
-		this.message = message;
-	}
-
-	@Override
-	public String getMessage() {
-		return message;
+	public NoSuchPostException(String s) {
+		super(s);
 	}
 }
