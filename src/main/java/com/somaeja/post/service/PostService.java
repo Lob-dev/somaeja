@@ -25,7 +25,7 @@ public class PostService {
 
 	// Post Create
 	@Transactional
-	public Post savePost(CreatePostDto createDto) {
+	public Post savePostInfo(CreatePostDto createDto) {
 		// user 아이디 조회, User Id는 Login 정보로 반환...? 인터셉터(인증)?
 		long userId = 1;
 		// location 정보 조회, Location 탐색 = ID 확인 -> ID 반환
@@ -36,15 +36,12 @@ public class PostService {
 		Post savePost = createDto.toEntity(userId, locationId, imageId);
 
 		int hasSave = postMapper.save(savePost);
-		try {
-			if (hasSave < 1) {
-				// controller advice 에서 catch..? -> internal Server Error
-				throw new SavePostFailedException("Save Failed :: TITLE ="
-					+ savePost.getTitle() + " USER ID =" + userId);
-			}
-		} catch (SavePostFailedException exception) {
-			// logger.debug()...
+		if (hasSave < 1) {
+			// controller advice 에서 catch..? -> internal Server Error
+			throw new SavePostFailedException("Save Failed :: TITLE ="
+				+ savePost.getTitle() + " USER ID =" + userId);
 		}
+
 		return savePost;
 	}
 
@@ -73,17 +70,17 @@ public class PostService {
 
 	// Post Delete
 
-	public int deletePost(Long postId) {
+	public int deletePostInfo(Long postId) {
 		int hasDelete = postMapper.deletePost(postId);
 		if (hasDelete < 1) {
-			throw new NoSuchPostException("delete post fail :: ID = " + postId);
+			throw new NoSuchPostException("Delete Post Fail :: ID = " + postId);
 		}
 		return hasDelete;
 	}
 
 	// Post Modify
 
-	public Post modifyPost(Long postId, ModifyPostDto modifyPostDto) {
+	public Post changePostInfo(Long postId, ModifyPostDto modifyPostDto) {
 		String location = modifyPostDto.getLocation();
 		// Long locationId = locationMapper.findLocation(loacation);
 		Long locationId = 1L;
@@ -96,12 +93,11 @@ public class PostService {
 			throw new NoSuchPostException("Post Find Failed :: ID = " + postId);
 		}
 
-		Post updateEntity = modifyPostDto.toUpdateEntity(postId, locationId, imageId, savedPost);
-
+		Post updateEntity = modifyPostDto.toEntity(savedPost.getId(), locationId, imageId);
 		int hasModify = postMapper.modifyPost(updateEntity);
 		if (hasModify < 1) {
 			throw new ModifyPostFailedException(
-				"modify post fail :: ID = " + postId + " USER ID =" + savedPost.getUserId());
+				"Modify Post Fail :: ID = " + postId + " USER ID =" + savedPost.getUserId());
 		}
 		return updateEntity;
 	}

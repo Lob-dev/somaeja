@@ -22,9 +22,9 @@ public class PostController {
 	private PostService postService;
 
 	@PostMapping("/posts")
-	public ResponseEntity<PostInfo> createPost(@Valid @RequestBody CreatePostDto postDto) {
+	public ResponseEntity<PostInfo> createPostInfo(@Valid @RequestBody CreatePostDto postDto) {
 		// Image files -> Stream -> resources / static / (여기에 저장)
-		Post savePost = postService.savePost(postDto);
+		Post savePost = postService.savePostInfo(postDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(PostInfo.from(savePost.getId(), "post created!"));
 	}
 
@@ -68,14 +68,14 @@ public class PostController {
 	}
 
 	@DeleteMapping("/posts/{postId}")
-	public ResponseEntity<PostInfo> DeletePost(@PathVariable Long postId) {
-		int hasDelete = postService.deletePost(postId);
+	public ResponseEntity<PostInfo> DeletePostInfo(@PathVariable Long postId) {
+		int hasDelete = postService.deletePostInfo(postId);
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(postId, "post deleted!"));
 	}
 
-	@PatchMapping("/posts/{postId}")
-	public ResponseEntity<PostInfo> modifyPost(@PathVariable Long postId, @Valid @RequestBody ModifyPostDto modifyPostDto){
-		Post modifyPost = postService.modifyPost(postId, modifyPostDto);
+	@PutMapping("/posts/{postId}")
+	public ResponseEntity<PostInfo> changePostInfo(@PathVariable Long postId, @Valid @RequestBody ModifyPostDto modifyPostDto){
+		Post modifyPost = postService.changePostInfo(postId, modifyPostDto);
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(modifyPost.getId(), "post updated!"));
 	}
 }

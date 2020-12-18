@@ -175,7 +175,7 @@ class PostControllerTest {
 	}
 
 	@Test
-	@DisplayName("delete post by postId")
+	@DisplayName("Delete post by postId")
 	void deletePostByPostId() throws Exception {
 		// Then
 		mockMvc.perform(delete("/posts/{postId}" , 1L))
@@ -184,7 +184,7 @@ class PostControllerTest {
 	}
 
 	@Test
-	@DisplayName("delete post by postId - 실패, 잘못된 타입의 값이 넘어왔을 경우")
+	@DisplayName("Delete post by postId - 실패, 잘못된 타입의 값이 넘어왔을 경우")
 	void deletePostByPostId_BadRequest_WrongType() throws Exception {
 		// Then
 		mockMvc.perform(delete("/posts/{postId}" , "str"))
@@ -193,7 +193,7 @@ class PostControllerTest {
 	}
 
 	@Test
-	@DisplayName("delete post by postId - 해당하는 컨텐츠가 없는 경우")
+	@DisplayName("Delete post by postId - 해당하는 컨텐츠가 없는 경우")
 	void deletePostByPostId_NoContent() throws Exception {
 		// Then
 		mockMvc.perform(delete("/posts/{postId}" , 1213124415))
@@ -202,7 +202,7 @@ class PostControllerTest {
 	}
 
 	@Test
-	@DisplayName("Modify post by postId")
+	@DisplayName("Change post by postId")
 	void modifyPostByPostId() throws Exception {
 		// Given
 		ModifyPostDto postDto = ModifyPostDto.builder()
@@ -215,7 +215,7 @@ class PostControllerTest {
 			.build();
 
 		// Then
-		mockMvc.perform(patch("/posts/{postId}" , 1L)
+		mockMvc.perform(put("/posts/{postId}" , 1L)
 			.content(objectMapper.writeValueAsString(postDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
@@ -223,7 +223,7 @@ class PostControllerTest {
 	}
 
 	@Test
-	@DisplayName("Modify post by postId - 실패, 잘못된 타입의 값이 넘어왔을 경우")
+	@DisplayName("Change post by postId - 실패, 잘못된 타입의 값이 넘어왔을 경우")
 	void modifyPostByPostId_BadRequest_WrongType() throws Exception {
 		// Given
 		ModifyPostDto postDto = ModifyPostDto.builder()
@@ -236,7 +236,7 @@ class PostControllerTest {
 			.build();
 
 		// Then
-		mockMvc.perform(patch("/posts/{postId}" , "str")
+		mockMvc.perform(put("/posts/{postId}" , "str")
 			.content(objectMapper.writeValueAsString(postDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
@@ -244,7 +244,7 @@ class PostControllerTest {
 	}
 
 	@Test
-	@DisplayName("Modify post by postId - 해당하는 컨텐츠가 없는 경우")
+	@DisplayName("Change post by postId - 해당하는 컨텐츠가 없는 경우")
 	void modifyPostByPostId_NoContent() throws Exception {
 		// Given
 		ModifyPostDto postDto = ModifyPostDto.builder()
@@ -257,7 +257,7 @@ class PostControllerTest {
 			.build();
 
 		// Then
-		mockMvc.perform(patch("/posts/{postId}", 1123241L)
+		mockMvc.perform(put("/posts/{postId}", 1123241L)
 			.content(objectMapper.writeValueAsString(postDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
