@@ -1,6 +1,5 @@
 package com.somaeja.post.dto;
 
-
 import com.somaeja.post.entity.Post;
 import lombok.*;
 
@@ -13,8 +12,14 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class CreatePostDto {
+public class ModifyPostDto {
+
+	@NotNull
+	@Min(0)
+	private Long userId;
+
+	@NotEmpty
+	private String imageName;
 
 	@NotEmpty
 	private String title;
@@ -32,8 +37,10 @@ public class CreatePostDto {
 	private boolean isNegotiable;
 	private boolean isOfflineTrade;
 
-	public Post toEntity(Long userId, Long locationId, Long imageId) {
+	public Post toEntity(Long postId, Long locationId, Long imageId) {
+
 		return Post.builder()
+			.id(postId)
 			.title(title)
 			.content(content)
 			.price(price)

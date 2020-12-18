@@ -9,6 +9,8 @@ import java.util.List;
 public interface PostMapper {
 	int save(Post post);
 
+	Post findOne(Long postId);
+
 	List<Post> findByAll();
 
 	List<Post> findByTitle(String searchTitle);
@@ -16,4 +18,8 @@ public interface PostMapper {
 	List<Post> findByLocation(Long locationId);
 
 	List<Post> findByUser(Long userId);
+
+	int deletePost(Long postId);
+
+	int changePost(Post modifyPost);
 }

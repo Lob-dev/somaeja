@@ -2,6 +2,7 @@ package com.somaeja.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somaeja.post.dto.CreatePostDto;
+import com.somaeja.post.dto.ModifyPostDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,8 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -124,7 +124,7 @@ class PostControllerTest {
 	@DisplayName("find post By location")
 	void findPostByLocation() throws Exception {
 		// Then
-		mockMvc.perform(get("/posts/locations/{locationId}", 1L))
+		mockMvc.perform(get("/locations/{locationId}/posts", 1L))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -133,7 +133,7 @@ class PostControllerTest {
 	@DisplayName("find post By location - 실패, 잘못된 타입의 값이 넘어왔을 경우")
 	void findPostByLocation_BadRequest_WrongType() throws Exception {
 		// Then
-		mockMvc.perform(get("/posts/locations/{locationId}", "1L"))
+		mockMvc.perform(get("/locations/{locationId}/posts", "1L"))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
@@ -142,7 +142,7 @@ class PostControllerTest {
 	@DisplayName("find post By location - 해당하는 컨텐츠가 없는 경우")
 	void findPostByLocation_NoContent() throws Exception {
 		// Then
-		mockMvc.perform(get("/posts/locations/{locationId}", 113214L))
+		mockMvc.perform(get("/locations/{locationId}/posts", 113214L))
 			.andDo(print())
 			.andExpect(status().isNoContent());
 	}
@@ -151,7 +151,7 @@ class PostControllerTest {
 	@DisplayName("find post By user")
 	void findPostByUser() throws Exception {
 		// Then
-		mockMvc.perform(get("/posts/users/{userId}", 1L))
+		mockMvc.perform(get("/users/{userId}/posts", 3L))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -160,7 +160,7 @@ class PostControllerTest {
 	@DisplayName("find post By user - 실패, 잘못된 타입의 값이 넘어왔을 경우")
 	void findPostByUser_BadRequest_WrongType() throws Exception {
 		// Then
-		mockMvc.perform(get("/posts/users/{userId}", "1L"))
+		mockMvc.perform(get("/users/{userId}/posts", "1L"))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
@@ -169,8 +169,98 @@ class PostControllerTest {
 	@DisplayName("find post By user - 해당하는 컨텐츠가 없는 경우")
 	void findPostByUser_NoContent() throws Exception {
 		// Then
-		mockMvc.perform(get("/posts/users/{userId}", 113214L))
+		mockMvc.perform(get("/users/{userId}/posts", 113214L))
 			.andDo(print())
 			.andExpect(status().isNoContent());
+	}
+
+	@Test
+	@DisplayName("Delete post by postId")
+	void deletePostByPostId() throws Exception {
+		// Then
+		mockMvc.perform(delete("/posts/{postId}" , 1L))
+			.andDo(print())
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("Delete post by postId - 실패, 잘못된 타입의 값이 넘어왔을 경우")
+	void deletePostByPostId_BadRequest_WrongType() throws Exception {
+		// Then
+		mockMvc.perform(delete("/posts/{postId}" , "str"))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@DisplayName("Delete post by postId - 해당하는 컨텐츠가 없는 경우")
+	void deletePostByPostId_NoContent() throws Exception {
+		// Then
+		mockMvc.perform(delete("/posts/{postId}" , 1213124415))
+			.andDo(print())
+			.andExpect(status().isNotFound());
+	}
+
+	@Test
+	@DisplayName("Change post by postId")
+	void modifyPostByPostId() throws Exception {
+		// Given
+		ModifyPostDto postDto = ModifyPostDto.builder()
+			.userId(1L)
+			.imageName("image")
+			.title("title")
+			.content("content")
+			.price(100L)
+			.location("location")
+			.build();
+
+		// Then
+		mockMvc.perform(put("/posts/{postId}" , 1L)
+			.content(objectMapper.writeValueAsString(postDto))
+			.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("Change post by postId - 실패, 잘못된 타입의 값이 넘어왔을 경우")
+	void modifyPostByPostId_BadRequest_WrongType() throws Exception {
+		// Given
+		ModifyPostDto postDto = ModifyPostDto.builder()
+			.userId(1L)
+			.imageName("image")
+			.title("title")
+			.content("content")
+			.price(100L)
+			.location("location")
+			.build();
+
+		// Then
+		mockMvc.perform(put("/posts/{postId}" , "str")
+			.content(objectMapper.writeValueAsString(postDto))
+			.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@DisplayName("Change post by postId - 해당하는 컨텐츠가 없는 경우")
+	void modifyPostByPostId_NoContent() throws Exception {
+		// Given
+		ModifyPostDto postDto = ModifyPostDto.builder()
+			.userId(1L)
+			.imageName("image")
+			.title("title")
+			.content("content")
+			.price(100L)
+			.location("location")
+			.build();
+
+		// Then
+		mockMvc.perform(put("/posts/{postId}", 1123241L)
+			.content(objectMapper.writeValueAsString(postDto))
+			.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isNotFound());
 	}
 }

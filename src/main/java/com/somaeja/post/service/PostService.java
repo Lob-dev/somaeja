@@ -2,11 +2,16 @@ package com.somaeja.post.service;
 
 import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.FindPostDto;
+import com.somaeja.post.dto.ModifyPostDto;
 import com.somaeja.post.entity.Post;
+import com.somaeja.post.exception.ModifyPostFailedException;
+import com.somaeja.post.exception.NoSuchPostException;
+import com.somaeja.post.exception.SavePostFailedException;
 import com.somaeja.post.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +25,7 @@ public class PostService {
 
 	// Post Create
 	@Transactional
-	public Post savePost(CreatePostDto createDto) {
+	public Post savePostInfo(CreatePostDto createDto) {
 		// user 아이디 조회, User Id는 Login 정보로 반환...? 인터셉터(인증)?
 		long userId = 1;
 		// location 정보 조회, Location 탐색 = ID 확인 -> ID 반환
@@ -30,11 +35,13 @@ public class PostService {
 		long imageId = 1;
 		Post savePost = createDto.toEntity(userId, locationId, imageId);
 
-		int save = postMapper.save(savePost);
-		if (save < 1){
+		int hasSave = postMapper.save(savePost);
+		if (hasSave < 1) {
 			// controller advice 에서 catch..? -> internal Server Error
-			throw new RuntimeException("Save post fails");
+			throw new SavePostFailedException("Save Failed :: TITLE ="
+				+ savePost.getTitle() + " USER ID =" + userId);
 		}
+
 		return savePost;
 	}
 
@@ -63,8 +70,37 @@ public class PostService {
 
 	// Post Delete
 
+	public int deletePostInfo(Long postId) {
+		int hasDelete = postMapper.deletePost(postId);
+		if (hasDelete < 1) {
+			throw new NoSuchPostException("Delete Post Fail :: ID = " + postId);
+		}
+		return hasDelete;
+	}
 
 	// Post Modify
+
+	public Post changePostInfo(Long postId, ModifyPostDto modifyPostDto) {
+		String location = modifyPostDto.getLocation();
+		// Long locationId = locationMapper.findLocation(loacation);
+		Long locationId = 1L;
+
+		String imageName = modifyPostDto.getImageName();
+		// Long imageId = imageMapper.findImage(imageName);
+		Long imageId = 1L;
+		Post savedPost = postMapper.findOne(postId);
+		if (ObjectUtils.isEmpty(savedPost)){
+			throw new NoSuchPostException("Post Find Failed :: ID = " + postId);
+		}
+
+		Post updateEntity = modifyPostDto.toEntity(savedPost.getId(), locationId, imageId);
+		int hasModify = postMapper.changePost(updateEntity);
+		if (hasModify < 1) {
+			throw new ModifyPostFailedException(
+				"Modify Post Fail :: ID = " + postId + " USER ID =" + savedPost.getUserId());
+		}
+		return updateEntity;
+	}
 
 	private List<FindPostDto> toDtoList(List<Post> posts) {
 		List<FindPostDto> postDtoList = new ArrayList<>();
