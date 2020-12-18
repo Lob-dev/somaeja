@@ -15,6 +15,8 @@ public interface PostMapper {
 
 	List<Post> findByTitle(String searchTitle);
 
+	List<Post> findByContent(String searchContent);
+
 	List<Post> findByLocation(Long locationId);
 
 	List<Post> findByUser(Long userId);

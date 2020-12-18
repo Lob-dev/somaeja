@@ -33,16 +33,16 @@ public class PostService {
 		long locationId = 1;
 		// image 정보 조회, Image 테이블에 저장 -> ID 생성 -> ID 반환
 		long imageId = 1;
-		Post savePost = createDto.toEntity(userId, locationId, imageId);
+		Post savePostInfo = createDto.toEntity(userId, locationId, imageId);
 
-		int hasSave = postMapper.save(savePost);
-		if (hasSave < 1) {
+		int hasSaved = postMapper.save(savePostInfo);
+		if (hasSaved < 1) {
 			// controller advice 에서 catch..? -> internal Server Error
 			throw new SavePostFailedException("Save Failed :: TITLE ="
-				+ savePost.getTitle() + " USER ID =" + userId);
+				+ savePostInfo.getTitle() + " USER ID =" + userId);
 		}
 
-		return savePost;
+		return savePostInfo;
 	}
 
 	// Post Find
@@ -54,6 +54,11 @@ public class PostService {
 	public List<FindPostDto> findByTitle(String searchTitle) {
 		List<Post> postsByTitle = postMapper.findByTitle(searchTitle);
 		return toDtoList(postsByTitle);
+	}
+
+	public List<FindPostDto> findByContent(String searchContent) {
+		List<Post> postsByContent = postMapper.findByContent(searchContent);
+		return toDtoList(postsByContent);
 	}
 
 	public List<FindPostDto> findByLocation(Long locationId) {
@@ -70,12 +75,11 @@ public class PostService {
 
 	// Post Delete
 
-	public int deletePostInfo(Long postId) {
-		int hasDelete = postMapper.deletePost(postId);
-		if (hasDelete < 1) {
+	public void deletePostInfo(Long postId) {
+		int hasDeleted = postMapper.deletePost(postId);
+		if (hasDeleted < 1) {
 			throw new NoSuchPostException("Delete Post Fail :: ID = " + postId);
 		}
-		return hasDelete;
 	}
 
 	// Post Modify
@@ -88,18 +92,18 @@ public class PostService {
 		String imageName = modifyPostDto.getImageName();
 		// Long imageId = imageMapper.findImage(imageName);
 		Long imageId = 1L;
-		Post savedPost = postMapper.findOne(postId);
-		if (ObjectUtils.isEmpty(savedPost)){
+		Post savedPostInfo = postMapper.findOne(postId);
+		if (ObjectUtils.isEmpty(savedPostInfo)){
 			throw new NoSuchPostException("Post Find Failed :: ID = " + postId);
 		}
 
-		Post updateEntity = modifyPostDto.toEntity(savedPost.getId(), locationId, imageId);
-		int hasModify = postMapper.changePost(updateEntity);
-		if (hasModify < 1) {
+		Post changePostInfo = modifyPostDto.toEntity(savedPostInfo.getId(), locationId, imageId);
+		int hasChanged = postMapper.changePost(changePostInfo);
+		if (hasChanged < 1) {
 			throw new ModifyPostFailedException(
-				"Modify Post Fail :: ID = " + postId + " USER ID =" + savedPost.getUserId());
+				"Modify Post Fail :: ID = " + postId + " USER ID =" + savedPostInfo.getUserId());
 		}
-		return updateEntity;
+		return changePostInfo;
 	}
 
 	private List<FindPostDto> toDtoList(List<Post> posts) {
