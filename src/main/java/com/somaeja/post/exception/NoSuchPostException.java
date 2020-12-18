@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 
 public class NoSuchPostException extends NoSuchElementException {
 
-	public NoSuchPostException(String detailMessage) {
-		super(detailMessage);
+	public NoSuchPostException(String errorMessage) {
+		super(errorMessage);
 	}
 }
