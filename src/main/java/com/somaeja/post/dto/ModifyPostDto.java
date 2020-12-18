@@ -37,9 +37,7 @@ public class ModifyPostDto {
 	private boolean isNegotiable;
 	private boolean isOfflineTrade;
 
-	public Post toUpdateEntity(Long postId, Long locationId, Long imageId, Post savedEntity) {
-
-		executeVerificationOfDto(savedEntity);
+	public Post toEntity(Long postId, Long locationId, Long imageId) {
 
 		return Post.builder()
 			.id(postId)
@@ -54,17 +52,5 @@ public class ModifyPostDto {
 			.createdDate(LocalDateTime.now())
 			.modifyDate(LocalDateTime.now())
 			.build();
-	}
-
-	private void executeVerificationOfDto(Post savedEntity) {
-		if (!savedEntity.isSameTitle(title) && title.equals("")) {
-			title = savedEntity.getTitle();
-		} else if (!savedEntity.isSameContent(content) && content.equals("")) {
-			content = savedEntity.getContent();
-		} else if (!savedEntity.isSamePrice(price) && price.equals(0L)) {
-			price = savedEntity.getPrice();
-		} else if (!savedEntity.isSameUserId(userId) && userId.equals(0L)) {
-			userId = savedEntity.getUserId();
-		}
 	}
 }
