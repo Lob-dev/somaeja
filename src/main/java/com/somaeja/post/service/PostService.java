@@ -94,7 +94,7 @@ public class PostService {
 		}
 
 		Post updateEntity = modifyPostDto.toEntity(savedPost.getId(), locationId, imageId);
-		int hasModify = postMapper.modifyPost(updateEntity);
+		int hasModify = postMapper.changePost(updateEntity);
 		if (hasModify < 1) {
 			throw new ModifyPostFailedException(
 				"Modify Post Fail :: ID = " + postId + " USER ID =" + savedPost.getUserId());

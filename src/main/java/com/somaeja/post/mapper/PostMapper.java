@@ -21,5 +21,5 @@ public interface PostMapper {
 
 	int deletePost(Long postId);
 
-	int modifyPost(Post modifyPost);
+	int changePost(Post modifyPost);
 }
