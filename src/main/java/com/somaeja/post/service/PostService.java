@@ -92,16 +92,17 @@ public class PostService {
 		String imageName = modifyPostDto.getImageName();
 		// Long imageId = imageMapper.findImage(imageName);
 		Long imageId = 1L;
-		Post savedPostInfo = postMapper.findOne(postId);
-		if (ObjectUtils.isEmpty(savedPostInfo)){
+
+		Integer hasFind = postMapper.findPostById(postId);
+		if (ObjectUtils.isEmpty(hasFind)){
 			throw new NoSuchPostException("Post Find Failed :: ID = " + postId);
 		}
 
-		Post changePostInfo = modifyPostDto.toEntity(savedPostInfo.getId(), locationId, imageId);
+		Post changePostInfo = modifyPostDto.toEntity(postId, locationId, imageId);
 		int hasChanged = postMapper.changePost(changePostInfo);
 		if (hasChanged < 1) {
 			throw new ModifyPostFailedException(
-				"Modify Post Fail :: ID = " + postId + " USER ID =" + savedPostInfo.getUserId());
+				"Change Post Fail :: ID = " + postId + " USER ID =" + modifyPostDto.getUserId());
 		}
 		return changePostInfo;
 	}

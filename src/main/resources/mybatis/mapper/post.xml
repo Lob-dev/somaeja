@@ -31,8 +31,8 @@
         )
     </insert>
 
-    <select id="findOne" resultType="com.somaeja.post.entity.Post" parameterType="long">
-        SELECT *
+    <select id="findOne" resultType="int" parameterType="long">
+        SELECT POST_ID
         FROM POST
         WHERE POST_ID = #{postId}
     </select>
