@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.when;
 class PostServiceTest {
 	@Mock PostMapper postMapper;
 	private Post post;
+	private Post badPost;
 
 	@BeforeEach
 	void initialPost() {
@@ -36,6 +38,8 @@ class PostServiceTest {
 			.userId(1L)
 			.locationId(1L)
 			.build();
+
+		badPost = Post.builder().build();
 	}
 
 	@Test
@@ -53,9 +57,9 @@ class PostServiceTest {
 	@DisplayName("save Post Test 실패")
 	void savePost_fail(){
 		// When
-		when(postMapper.save(post)).thenThrow(new SavePostFailedException("Save Failed"));
+		when(postMapper.save(badPost)).thenThrow(new SavePostFailedException("Save Failed"));
 
 		// Then
-		assertThrows(SavePostFailedException.class, () -> postMapper.save(post));
+		assertThrows(SavePostFailedException.class, () -> postMapper.save(badPost));
 	}
 }

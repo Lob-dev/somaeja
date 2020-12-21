@@ -30,25 +30,25 @@ public class PostController {
 
 	@GetMapping("/posts")
 	public ResponseEntity<List<FindPostDto>> findPostAll(
-		@RequestParam(value = "title", required = false) String title,
-		@RequestParam(value = "content", required = false) String content) {
+		@RequestParam(value = "title", required = false) String titleOfQuery,
+		@RequestParam(value = "content", required = false) String contentOfQuery) {
 
-		if (title == null && content == null) {
+		if (titleOfQuery == null && contentOfQuery == null) {
 			List<FindPostDto> postsByAll = postService.findByAll();
 			if (CollectionUtils.isEmpty(postsByAll)) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postsByAll);
 			}
 
 			return ResponseEntity.status(HttpStatus.OK).body(postsByAll);
-		} else if (content != null){
-			List<FindPostDto> postsByContent = postService.findByContent(content);
+		} else if (contentOfQuery != null){
+			List<FindPostDto> postsByContent = postService.findByContent(contentOfQuery);
 			if (CollectionUtils.isEmpty(postsByContent)) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postsByContent);
 			}
 
 			return ResponseEntity.status(HttpStatus.OK).body(postsByContent);
 	    } else {
-			List<FindPostDto> postsByTitle = postService.findByTitle(title);
+			List<FindPostDto> postsByTitle = postService.findByTitle(titleOfQuery);
 			if (CollectionUtils.isEmpty(postsByTitle)) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postsByTitle);
 			}
