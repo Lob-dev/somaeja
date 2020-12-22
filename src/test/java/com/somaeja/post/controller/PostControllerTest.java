@@ -28,7 +28,9 @@ class PostControllerTest {
 
 	CreatePostDto postDto;
 
-	CreatePostDto BadPostDto;
+	CreatePostDto badPostDto;
+
+	ModifyPostDto modifyDto;
 
 	@BeforeEach
 	void initPost() {
@@ -40,6 +42,15 @@ class PostControllerTest {
 			.location("location")
 			.isNegotiable(false)
 			.isOfflineTrade(false)
+			.build();
+
+		modifyDto = ModifyPostDto.builder()
+			.userId(1L)
+			.imageName("image")
+			.title("title")
+			.content("content")
+			.price(100L)
+			.location("location")
 			.build();
 	}
 
@@ -63,12 +74,12 @@ class PostControllerTest {
 	@DisplayName("create post test - 실패, input 값이 없을 경우")
 	void createPost_BadRequest() throws Exception {
 		// Given
-		BadPostDto = CreatePostDto.builder().build();
+		badPostDto = CreatePostDto.builder().build();
 
 		// Then
 		mockMvc.perform(post("/posts")
 			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(BadPostDto)))
+			.content(objectMapper.writeValueAsString(badPostDto)))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
@@ -77,7 +88,7 @@ class PostControllerTest {
 	@DisplayName("create post test - 실패, 비어있는 Input 값을 받을 경우")
 	void createPost_BadRequest_WrongType() throws Exception{
 		// Given
-		BadPostDto = CreatePostDto.builder()
+		badPostDto = CreatePostDto.builder()
 			.title("")
 			.content("")
 			.price(1000L)
@@ -88,7 +99,7 @@ class PostControllerTest {
 		// Then
 		mockMvc.perform(post("/posts")
 			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(BadPostDto)))
+			.content(objectMapper.writeValueAsString(badPostDto)))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
@@ -106,7 +117,7 @@ class PostControllerTest {
 	@DisplayName("find post By title")
 	void findPostByTitle() throws Exception {
 		// Then
-		mockMvc.perform(get("/posts?title=title"))
+		mockMvc.perform(get("/posts?title=t"))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -116,6 +127,24 @@ class PostControllerTest {
 	void findPostByTitle_NoContent() throws Exception {
 		// Then
 		mockMvc.perform(get("/posts?title=absdssesea"))
+			.andDo(print())
+			.andExpect(status().isNoContent());
+	}
+
+	@Test
+	@DisplayName("find post By Content")
+	void findPostByContent() throws Exception {
+		// Then
+		mockMvc.perform(get("/posts?content=c"))
+			.andDo(print())
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("find post By Content - 해당하는 컨텐츠가 없는 경우")
+	void findPostByContent_NoContent() throws Exception {
+		// Then
+		mockMvc.perform(get("/posts?content=absdsseseddsaa"))
 			.andDo(print())
 			.andExpect(status().isNoContent());
 	}
@@ -204,19 +233,10 @@ class PostControllerTest {
 	@Test
 	@DisplayName("Change post by postId")
 	void modifyPostByPostId() throws Exception {
-		// Given
-		ModifyPostDto postDto = ModifyPostDto.builder()
-			.userId(1L)
-			.imageName("image")
-			.title("title")
-			.content("content")
-			.price(100L)
-			.location("location")
-			.build();
 
 		// Then
 		mockMvc.perform(put("/posts/{postId}" , 1L)
-			.content(objectMapper.writeValueAsString(postDto))
+			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isOk());
@@ -225,19 +245,10 @@ class PostControllerTest {
 	@Test
 	@DisplayName("Change post by postId - 실패, 잘못된 타입의 값이 넘어왔을 경우")
 	void modifyPostByPostId_BadRequest_WrongType() throws Exception {
-		// Given
-		ModifyPostDto postDto = ModifyPostDto.builder()
-			.userId(1L)
-			.imageName("image")
-			.title("title")
-			.content("content")
-			.price(100L)
-			.location("location")
-			.build();
 
 		// Then
 		mockMvc.perform(put("/posts/{postId}" , "str")
-			.content(objectMapper.writeValueAsString(postDto))
+			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
@@ -246,19 +257,10 @@ class PostControllerTest {
 	@Test
 	@DisplayName("Change post by postId - 해당하는 컨텐츠가 없는 경우")
 	void modifyPostByPostId_NoContent() throws Exception {
-		// Given
-		ModifyPostDto postDto = ModifyPostDto.builder()
-			.userId(1L)
-			.imageName("image")
-			.title("title")
-			.content("content")
-			.price(100L)
-			.location("location")
-			.build();
 
 		// Then
 		mockMvc.perform(put("/posts/{postId}", 1123241L)
-			.content(objectMapper.writeValueAsString(postDto))
+			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isNotFound());

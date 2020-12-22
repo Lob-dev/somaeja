@@ -24,23 +24,31 @@ public class PostController {
 	@PostMapping("/posts")
 	public ResponseEntity<PostInfo> createPostInfo(@Valid @RequestBody CreatePostDto postDto) {
 		// Image files -> Stream -> resources / static / (여기에 저장)
-		Post savePost = postService.savePostInfo(postDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(PostInfo.from(savePost.getId(), "post created!"));
+		Post savePostInfo = postService.savePostInfo(postDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(PostInfo.from(savePostInfo.getId(), "post created!"));
 	}
 
 	@GetMapping("/posts")
 	public ResponseEntity<List<FindPostDto>> findPostAll(
-		@RequestParam(value = "title", required = false) String title) {
+		@RequestParam(value = "title", required = false) String titleOfQuery,
+		@RequestParam(value = "content", required = false) String contentOfQuery) {
 
-		if (title == null) {
+		if (titleOfQuery == null && contentOfQuery == null) {
 			List<FindPostDto> postsByAll = postService.findByAll();
 			if (CollectionUtils.isEmpty(postsByAll)) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postsByAll);
 			}
 
 			return ResponseEntity.status(HttpStatus.OK).body(postsByAll);
-		} else {
-			List<FindPostDto> postsByTitle = postService.findByTitle(title);
+		} else if (contentOfQuery != null){
+			List<FindPostDto> postsByContent = postService.findByContent(contentOfQuery);
+			if (CollectionUtils.isEmpty(postsByContent)) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postsByContent);
+			}
+
+			return ResponseEntity.status(HttpStatus.OK).body(postsByContent);
+	    } else {
+			List<FindPostDto> postsByTitle = postService.findByTitle(titleOfQuery);
 			if (CollectionUtils.isEmpty(postsByTitle)) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postsByTitle);
 			}
@@ -69,7 +77,7 @@ public class PostController {
 
 	@DeleteMapping("/posts/{postId}")
 	public ResponseEntity<PostInfo> DeletePostInfo(@PathVariable Long postId) {
-		int hasDelete = postService.deletePostInfo(postId);
+		postService.deletePostInfo(postId);
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(postId, "post deleted!"));
 	}
 

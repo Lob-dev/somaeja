@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Builder
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class FindPostDto {
 
 	private Long id;

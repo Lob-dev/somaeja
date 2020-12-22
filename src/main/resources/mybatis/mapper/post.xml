@@ -31,8 +31,8 @@
         )
     </insert>
 
-    <select id="findOne" resultType="com.somaeja.post.entity.Post" parameterType="long">
-        SELECT *
+    <select id="findOne" resultType="int" parameterType="long">
+        SELECT POST_ID
         FROM POST
         WHERE POST_ID = #{postId}
     </select>
@@ -46,6 +46,12 @@
         SELECT *
         FROM POST
         WHERE TITLE LIKE CONCAT('%',#{searchTitle},'%')
+    </select>
+
+    <select id="findByContent" resultType="com.somaeja.post.entity.Post" parameterType="string">
+        SELECT *
+        FROM POST
+        WHERE CONTENT LIKE CONCAT('%',#{searchContent},'%')
     </select>
 
     <select id="findByLocation" resultType="com.somaeja.post.entity.Post" parameterType="long">
@@ -64,7 +70,7 @@
         DELETE FROM POST WHERE POST_ID = #{postId}
     </delete>
 
-    <update id="modifyPost" parameterType="com.somaeja.post.entity.Post">
+    <update id="changePost" parameterType="com.somaeja.post.entity.Post">
         UPDATE POST SET
             LOCATION_ID = #{locationId},
             IMAGE_ID = #{imageId},

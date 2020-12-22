@@ -9,11 +9,13 @@ import java.util.List;
 public interface PostMapper {
 	int save(Post post);
 
-	Post findOne(Long postId);
+	Integer findPostById(Long postId);
 
 	List<Post> findByAll();
 
 	List<Post> findByTitle(String searchTitle);
+
+	List<Post> findByContent(String searchContent);
 
 	List<Post> findByLocation(Long locationId);
 

@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class PostInfo {
-	private Long postId;
-	private String message;
+	private Long id;
+	private String detailMessage;
 
-	public static PostInfo from(Long id, String message) {
-		return new PostInfo(id, message);
+	public static PostInfo from(Long id, String detailMessage) {
+		return new PostInfo(id, detailMessage);
 	}
 }
