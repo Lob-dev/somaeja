@@ -98,11 +98,11 @@ public class PostService {
 			throw new NoSuchPostException("Post Find Failed :: ID = " + postId);
 		}
 
-		Post changePostInfo = modifyPostDto.toEntity(postId, locationId, imageId);
+		Post changePostInfo = modifyPostDto.toEntity(hasFind.longValue(), locationId, imageId);
 		int hasChanged = postMapper.changePost(changePostInfo);
 		if (hasChanged < 1) {
 			throw new ModifyPostFailedException(
-				"Change Post Fail :: ID = " + postId + " USER ID =" + modifyPostDto.getUserId());
+				"Change Post Fail :: ID = " + hasFind.longValue() + " USER ID =" + modifyPostDto.getUserId());
 		}
 		return changePostInfo;
 	}
