@@ -9,7 +9,7 @@ import java.util.List;
 public interface PostMapper {
 	int save(Post post);
 
-	Integer findPostById(Long postId);
+	Long findPostById(Long postId);
 
 	List<Post> findByAll();
 

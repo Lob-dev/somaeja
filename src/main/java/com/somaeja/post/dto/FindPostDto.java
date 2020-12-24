@@ -13,20 +13,19 @@ public class FindPostDto {
 	private Long id;
 	private String title;
 	private String content;
+	private String location;
 	private Long price;
 	private Long imageId;
 	private Long userId;
-	private Long locationId;
-
 	public static FindPostDto of(Post post) {
 		return FindPostDto.builder()
 			.id(post.getId())
 			.title(post.getTitle())
 			.content(post.getContent())
+			.location(post.getLocation())
 			.price(post.getPrice())
 			.imageId(post.getImageId())
 			.userId(post.getUserId())
-			.locationId(post.getLocationId())
 			.build();
 	}
 }

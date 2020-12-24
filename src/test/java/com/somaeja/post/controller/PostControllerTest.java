@@ -39,7 +39,7 @@ class PostControllerTest {
 			.title("title")
 			.content("content")
 			.price(1000L)
-			.location("location")
+			.location("서울시 강동구 암사1동")
 			.isNegotiable(false)
 			.isOfflineTrade(false)
 			.build();
@@ -50,7 +50,7 @@ class PostControllerTest {
 			.title("title")
 			.content("content")
 			.price(100L)
-			.location("location")
+			.location("서울시 강동구 암사1동")
 			.build();
 	}
 

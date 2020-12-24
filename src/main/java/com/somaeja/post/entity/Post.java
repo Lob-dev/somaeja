@@ -2,10 +2,13 @@ package com.somaeja.post.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
 @Builder
 @Getter
+@ToString
 public class Post {
 
 	private Long id;
@@ -22,5 +25,6 @@ public class Post {
 	private boolean isOfflineTrade;
 	private LocalDateTime createdDate;
 	private LocalDateTime modifyDate;
+	private String location;
 
 }
