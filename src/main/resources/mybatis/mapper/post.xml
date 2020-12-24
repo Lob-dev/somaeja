@@ -31,38 +31,43 @@
         )
     </insert>
 
-    <select id="findOne" resultType="int" parameterType="long">
+    <select id="findPostById" resultType="long" parameterType="long">
         SELECT POST_ID
         FROM POST
         WHERE POST_ID = #{postId}
     </select>
 
     <select id="findByAll" resultType="com.somaeja.post.entity.Post">
-        SELECT *
-        FROM POST
+        SELECT POST.*, LOCATION.CITY_COUNTRY_TOWN as location
+        FROM POST INNER JOIN LOCATION
+        ON POST.LOCATION_ID = LOCATION.LOCATION_ID
     </select>
 
     <select id="findByTitle" resultType="com.somaeja.post.entity.Post" parameterType="string">
-        SELECT *
-        FROM POST
+        SELECT POST.*, LOCATION.CITY_COUNTRY_TOWN as location
+        FROM POST INNER JOIN LOCATION
+        ON POST.LOCATION_ID = LOCATION.LOCATION_ID
         WHERE TITLE LIKE CONCAT('%',#{searchTitle},'%')
     </select>
 
     <select id="findByContent" resultType="com.somaeja.post.entity.Post" parameterType="string">
-        SELECT *
-        FROM POST
+        SELECT POST.*, LOCATION.CITY_COUNTRY_TOWN as location
+        FROM POST INNER JOIN LOCATION
+        ON POST.LOCATION_ID = LOCATION.LOCATION_ID
         WHERE CONTENT LIKE CONCAT('%',#{searchContent},'%')
     </select>
 
     <select id="findByLocation" resultType="com.somaeja.post.entity.Post" parameterType="long">
-        SELECT *
-        FROM POST
-        WHERE LOCATION_ID = #{locationId}
+        SELECT POST.*, LOCATION.CITY_COUNTRY_TOWN as location
+        FROM POST INNER JOIN LOCATION
+        ON POST.LOCATION_ID = LOCATION.LOCATION_ID
+        WHERE POST.LOCATION_ID = #{locationId}
     </select>
 
     <select id="findByUser" resultType="com.somaeja.post.entity.Post" parameterType="long">
-        SELECT *
-        FROM POST
+        SELECT POST.*, LOCATION.CITY_COUNTRY_TOWN as location
+        FROM POST INNER JOIN LOCATION
+        ON POST.LOCATION_ID = LOCATION.LOCATION_ID
         WHERE USER_ID = #{userId}
     </select>
 

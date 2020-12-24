@@ -6,7 +6,7 @@ import com.somaeja.post.dto.FindPostDto;
 import com.somaeja.post.dto.ModifyPostDto;
 import com.somaeja.post.entity.Post;
 import com.somaeja.post.service.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -16,10 +16,10 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class PostController {
 
-	@Autowired
-	private PostService postService;
+	private final PostService postService;
 
 	@PostMapping("/posts")
 	public ResponseEntity<PostInfo> createPostInfo(@Valid @RequestBody CreatePostDto postDto) {
@@ -28,7 +28,7 @@ public class PostController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(PostInfo.from(savePostInfo.getId(), "post created!"));
 	}
 
-	@GetMapping("/posts")
+	@GetMapping(value = "/posts", produces = "application/json; charset=UTF8")
 	public ResponseEntity<List<FindPostDto>> findPostAll(
 		@RequestParam(value = "title", required = false) String titleOfQuery,
 		@RequestParam(value = "content", required = false) String contentOfQuery) {
@@ -57,7 +57,7 @@ public class PostController {
 		}
 	}
 
-	@GetMapping("/locations/{locationId}/posts")
+	@GetMapping(value = "/locations/{locationId}/posts", produces = "application/json; charset=UTF8")
 	public ResponseEntity<List<FindPostDto>> findPostByLocation(@PathVariable Long locationId) {
 		List<FindPostDto> PostsByLocation = postService.findByLocation(locationId);
 		if (CollectionUtils.isEmpty(PostsByLocation)) {
@@ -66,7 +66,7 @@ public class PostController {
 		return ResponseEntity.status(HttpStatus.OK).body(PostsByLocation);
 	}
 
-	@GetMapping("/users/{userId}/posts")
+	@GetMapping(value = "/users/{userId}/posts", produces = "application/json; charset=UTF8")
 	public ResponseEntity<List<FindPostDto>> findPostByUser(@PathVariable Long userId) {
 		List<FindPostDto> PostsByUser = postService.findByUser(userId);
 		if (CollectionUtils.isEmpty(PostsByUser)) {

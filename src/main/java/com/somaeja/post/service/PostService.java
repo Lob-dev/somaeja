@@ -1,5 +1,6 @@
 package com.somaeja.post.service;
 
+import com.somaeja.location.mapper.LocationMapper;
 import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.FindPostDto;
 import com.somaeja.post.dto.ModifyPostDto;
@@ -22,15 +23,15 @@ import java.util.List;
 public class PostService {
 
 	private final PostMapper postMapper;
+	private final LocationMapper locationMapper;
 
 	// Post Create
 	@Transactional
 	public Post savePostInfo(CreatePostDto createDto) {
 		// user 아이디 조회, User Id는 Login 정보로 반환...? 인터셉터(인증)?
 		long userId = 1;
-		// location 정보 조회, Location 탐색 = ID 확인 -> ID 반환
-		// locationId = LocationService.findLocation(createDto.getLocation());
-		long locationId = 1;
+
+		Long locationId = locationMapper.findLocationId(createDto.getLocation());
 		// image 정보 조회, Image 테이블에 저장 -> ID 생성 -> ID 반환
 		long imageId = 1;
 		Post savePostInfo = createDto.toEntity(userId, locationId, imageId);
@@ -84,25 +85,24 @@ public class PostService {
 
 	// Post Modify
 
-	public Post changePostInfo(Long postId, ModifyPostDto modifyPostDto) {
-		String location = modifyPostDto.getLocation();
-		// Long locationId = locationMapper.findLocation(loacation);
-		Long locationId = 1L;
+	public Post changePostInfo(Long postId, ModifyPostDto changePostDto) {
+		Long locationId = locationMapper.findLocationId(changePostDto.getLocation());
 
-		String imageName = modifyPostDto.getImageName();
+		String imageName = changePostDto.getImageName();
 		// Long imageId = imageMapper.findImage(imageName);
 		Long imageId = 1L;
 
-		Integer hasFind = postMapper.findPostById(postId);
+		Long hasFind = postMapper.findPostById(postId);
 		if (ObjectUtils.isEmpty(hasFind)){
 			throw new NoSuchPostException("Post Find Failed :: ID = " + postId);
 		}
 
-		Post changePostInfo = modifyPostDto.toEntity(hasFind.longValue(), locationId, imageId);
+		Post changePostInfo = changePostDto.toEntity(hasFind, locationId, imageId);
+
 		int hasChanged = postMapper.changePost(changePostInfo);
 		if (hasChanged < 1) {
 			throw new ModifyPostFailedException(
-				"Change Post Fail :: ID = " + hasFind.longValue() + " USER ID =" + modifyPostDto.getUserId());
+				"Change Post Fail :: ID = " + hasFind + " USER ID =" + changePostDto.getUserId());
 		}
 		return changePostInfo;
 	}
