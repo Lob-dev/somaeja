@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class ModifyPostDto {
 
 	@NotNull
@@ -46,6 +47,7 @@ public class ModifyPostDto {
 			.price(price)
 			.userId(userId)
 			.locationId(locationId)
+			.cityCountryTown(location)
 			.imageId(imageId)
 			.isNegotiable(isNegotiable)
 			.isOfflineTrade(isOfflineTrade)

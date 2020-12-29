@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 // Post Domain 용
 @ControllerAdvice
@@ -37,6 +38,13 @@ public class PostExceptionHandler {
 	protected ResponseEntity<ErrorResponse> handleModifyPostFailedException(ModifyPostFailedException exception) {
 		final ErrorResponse response = ErrorResponse.from(exception.getMessage(), null);
 		return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	// Post Find Exception Handler = Type MismatchException
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException() {
+		final ErrorResponse response = ErrorResponse.from("Failed to convert value of type", null);
+		return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
 	}
 
 }

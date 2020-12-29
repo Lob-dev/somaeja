@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.somaeja.location.mapper.LocationMapper">
+
+    <select id="findLocationId" resultType="long" parameterType="string">
+        SELECT LOCATION_ID
+        FROM LOCATION
+        WHERE CITY_COUNTRY_TOWN LIKE #{searchLocation}
+    </select>
+
+    <select id="findByLocationId" resultType="com.somaeja.location.entity.Location" parameterType="long">
+        SELECT *
+        FROM LOCATION
+        WHERE LOCATION_ID = #{locationId}
+    </select>
+
+    <select id="findByCity" resultType="string" parameterType="string">
+        SELECT CITY_COUNTRY_TOWN
+        FROM LOCATION
+        WHERE CITY LIKE CONCAT('%',#{cityName},'%')
+    </select>
+
+    <select id="findByCityCountry" resultType="string" parameterType="string">
+        SELECT CITY_COUNTRY_TOWN
+        FROM LOCATION
+        WHERE CITY_COUNTRY LIKE CONCAT('%',#{cityCountryName},'%')
+    </select>
+
+    <select id="findByTown" resultType="string" parameterType="string">
+        SELECT CITY_COUNTRY_TOWN
+        FROM LOCATION
+        WHERE TOWN LIKE CONCAT('%',#{town},'%')
+    </select>
+
+</mapper>
