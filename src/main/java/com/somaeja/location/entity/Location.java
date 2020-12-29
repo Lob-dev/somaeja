@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 public class Location {
 	// Insert Batch 용도
-	private Long id;
-	private String city;
-	private String cityCountry;
-	private String town;
-	private String cityCountryTown;
+	private final Long id;
+	private final String city;
+	private final String cityCountry;
+	private final String town;
+	private final String cityCountryTown;
 }

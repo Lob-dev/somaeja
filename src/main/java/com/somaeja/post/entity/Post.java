@@ -11,20 +11,20 @@ import java.time.LocalDateTime;
 @ToString
 public class Post {
 
-	private Long id;
+	private final Long id;
 	// User 정보
-	private Long userId;
+	private final Long userId;
 	// Location 정보
-	private Long locationId;
+	private final Long locationId;
 	// Image Path 정보
-	private Long imageId;
-	private String title;
-	private String content;
-	private Long price;
-	private boolean isNegotiable;
-	private boolean isOfflineTrade;
-	private LocalDateTime createdDate;
-	private LocalDateTime modifyDate;
-	private String location;
+	private final Long imageId;
+	private final String title;
+	private final String content;
+	private final Long price;
+	private final boolean isNegotiable;
+	private final boolean isOfflineTrade;
+	private final LocalDateTime createdDate;
+	private final LocalDateTime modifyDate;
+	private final String cityCountryTown;
 
 }

@@ -24,8 +24,8 @@ public class PostController {
 	@PostMapping("/posts")
 	public ResponseEntity<PostInfo> createPostInfo(@Valid @RequestBody CreatePostDto postDto) {
 		// Image files -> Stream -> resources / static / (여기에 저장)
-		Post savePostInfo = postService.savePostInfo(postDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(PostInfo.from(savePostInfo.getId(), "post created!"));
+		Post post = postService.savePostInfo(postDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(PostInfo.from(post.getId(), "post created!"));
 	}
 
 	@GetMapping(value = "/posts", produces = "application/json; charset=UTF8")
@@ -34,56 +34,56 @@ public class PostController {
 		@RequestParam(value = "content", required = false) String contentOfQuery) {
 
 		if (titleOfQuery == null && contentOfQuery == null) {
-			List<FindPostDto> postsByAll = postService.findByAll();
-			if (CollectionUtils.isEmpty(postsByAll)) {
-				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postsByAll);
+			List<FindPostDto> posts = postService.findByAll();
+			if (CollectionUtils.isEmpty(posts)) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(posts);
 			}
 
-			return ResponseEntity.status(HttpStatus.OK).body(postsByAll);
+			return ResponseEntity.status(HttpStatus.OK).body(posts);
 		} else if (contentOfQuery != null){
-			List<FindPostDto> postsByContent = postService.findByContent(contentOfQuery);
-			if (CollectionUtils.isEmpty(postsByContent)) {
-				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postsByContent);
+			List<FindPostDto> posts = postService.findByContent(contentOfQuery);
+			if (CollectionUtils.isEmpty(posts)) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(posts);
 			}
 
-			return ResponseEntity.status(HttpStatus.OK).body(postsByContent);
+			return ResponseEntity.status(HttpStatus.OK).body(posts);
 	    } else {
-			List<FindPostDto> postsByTitle = postService.findByTitle(titleOfQuery);
-			if (CollectionUtils.isEmpty(postsByTitle)) {
-				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postsByTitle);
+			List<FindPostDto> posts = postService.findByTitle(titleOfQuery);
+			if (CollectionUtils.isEmpty(posts)) {
+				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(posts);
 			}
 
-			return ResponseEntity.status(HttpStatus.OK).body(postsByTitle);
+			return ResponseEntity.status(HttpStatus.OK).body(posts);
 		}
 	}
 
 	@GetMapping(value = "/locations/{locationId}/posts", produces = "application/json; charset=UTF8")
 	public ResponseEntity<List<FindPostDto>> findPostByLocation(@PathVariable Long locationId) {
-		List<FindPostDto> PostsByLocation = postService.findByLocation(locationId);
-		if (CollectionUtils.isEmpty(PostsByLocation)) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(PostsByLocation);
+		List<FindPostDto> posts = postService.findByLocation(locationId);
+		if (CollectionUtils.isEmpty(posts)) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(posts);
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(PostsByLocation);
+		return ResponseEntity.status(HttpStatus.OK).body(posts);
 	}
 
 	@GetMapping(value = "/users/{userId}/posts", produces = "application/json; charset=UTF8")
 	public ResponseEntity<List<FindPostDto>> findPostByUser(@PathVariable Long userId) {
-		List<FindPostDto> PostsByUser = postService.findByUser(userId);
-		if (CollectionUtils.isEmpty(PostsByUser)) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(PostsByUser);
+		List<FindPostDto> posts = postService.findByUser(userId);
+		if (CollectionUtils.isEmpty(posts)) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(posts);
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(PostsByUser);
+		return ResponseEntity.status(HttpStatus.OK).body(posts);
 	}
 
 	@DeleteMapping("/posts/{postId}")
-	public ResponseEntity<PostInfo> DeletePostInfo(@PathVariable Long postId) {
+	public ResponseEntity<PostInfo> deletePostInfo(@PathVariable Long postId) {
 		postService.deletePostInfo(postId);
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(postId, "post deleted!"));
 	}
 
 	@PutMapping("/posts/{postId}")
 	public ResponseEntity<PostInfo> changePostInfo(@PathVariable Long postId, @Valid @RequestBody ModifyPostDto modifyPostDto){
-		Post modifyPost = postService.changePostInfo(postId, modifyPostDto);
-		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(modifyPost.getId(), "post updated!"));
+		Post post = postService.changePostInfo(postId, modifyPostDto);
+		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(post.getId(), "post updated!"));
 	}
 }

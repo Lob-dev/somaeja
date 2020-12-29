@@ -17,19 +17,19 @@
     <select id="findByCity" resultType="string" parameterType="string">
         SELECT CITY_COUNTRY_TOWN
         FROM LOCATION
-        WHERE CITY LIKE CONCAT('%',#{searchString},'%')
+        WHERE CITY LIKE CONCAT('%',#{cityName},'%')
     </select>
 
     <select id="findByCityCountry" resultType="string" parameterType="string">
         SELECT CITY_COUNTRY_TOWN
         FROM LOCATION
-        WHERE CITY_COUNTRY LIKE CONCAT('%',#{searchString},'%')
+        WHERE CITY_COUNTRY LIKE CONCAT('%',#{cityCountryName},'%')
     </select>
 
     <select id="findByTown" resultType="string" parameterType="string">
         SELECT CITY_COUNTRY_TOWN
         FROM LOCATION
-        WHERE TOWN LIKE CONCAT('%',#{searchString},'%')
+        WHERE TOWN LIKE CONCAT('%',#{town},'%')
     </select>
 
 </mapper>

@@ -22,6 +22,7 @@ public class LocationTest {
 			.city("서울시")
 			.cityCountry("강동구")
 			.town("암사1동")
+			.cityCountryTown("서울시 강동구 암사1동")
 			.build();
 
 		// Then

@@ -38,7 +38,7 @@ public class CreatePostDto {
 			.price(price)
 			.userId(userId)
 			.locationId(locationId)
-			.location(location)
+			.cityCountryTown(location)
 			.imageId(imageId)
 			.isNegotiable(isNegotiable)
 			.isOfflineTrade(isOfflineTrade)

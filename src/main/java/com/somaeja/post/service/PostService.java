@@ -19,22 +19,20 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class PostService {
 
 	private final PostMapper postMapper;
 	private final LocationMapper locationMapper;
 
 	// Post Create
-	@Transactional
 	public Post savePostInfo(CreatePostDto createDto) {
 		// user 아이디 조회, User Id는 Login 정보로 반환...? 인터셉터(인증)?
 		long userId = 1;
 
-		Long locationId = locationMapper.findLocationId(createDto.getLocation());
+		Long getLocationId = locationMapper.findLocationId(createDto.getLocation());
 		// image 정보 조회, Image 테이블에 저장 -> ID 생성 -> ID 반환
 		long imageId = 1;
-		Post savePostInfo = createDto.toEntity(userId, locationId, imageId);
+		Post savePostInfo = createDto.toEntity(userId, getLocationId, imageId);
 
 		int hasSaved = postMapper.save(savePostInfo);
 		if (hasSaved < 1) {
@@ -47,35 +45,39 @@ public class PostService {
 	}
 
 	// Post Find
+	@Transactional(readOnly = true)
 	public List<FindPostDto> findByAll() {
-		List<Post> postsByAll = postMapper.findByAll();
-		return toDtoList(postsByAll);
+		List<Post> posts = postMapper.findByAll();
+		return toDtoList(posts);
 	}
 
+	@Transactional(readOnly = true)
 	public List<FindPostDto> findByTitle(String searchTitle) {
-		List<Post> postsByTitle = postMapper.findByTitle(searchTitle);
-		return toDtoList(postsByTitle);
+		List<Post> posts = postMapper.findByTitle(searchTitle);
+		return toDtoList(posts);
 	}
 
+	@Transactional(readOnly = true)
 	public List<FindPostDto> findByContent(String searchContent) {
-		List<Post> postsByContent = postMapper.findByContent(searchContent);
-		return toDtoList(postsByContent);
+		List<Post> posts = postMapper.findByContent(searchContent);
+		return toDtoList(posts);
 	}
 
+	@Transactional(readOnly = true)
 	public List<FindPostDto> findByLocation(Long locationId) {
 		// location 정보 조회, ID 반환 location
-		List<Post> postsByLocation = postMapper.findByLocation(locationId);
-		return toDtoList(postsByLocation);
+		List<Post> posts = postMapper.findByLocation(locationId);
+		return toDtoList(posts);
 	}
 
+	@Transactional(readOnly = true)
 	public List<FindPostDto> findByUser(Long userId) {
-		List<Post> postsByUser = postMapper.findByUser(userId);
-		return toDtoList(postsByUser);
+		List<Post> posts = postMapper.findByUser(userId);
+		return toDtoList(posts);
 	}
 
 
 	// Post Delete
-
 	public void deletePostInfo(Long postId) {
 		int hasDeleted = postMapper.deletePost(postId);
 		if (hasDeleted < 1) {
@@ -84,20 +86,20 @@ public class PostService {
 	}
 
 	// Post Modify
-
+	@Transactional
 	public Post changePostInfo(Long postId, ModifyPostDto changePostDto) {
-		Long locationId = locationMapper.findLocationId(changePostDto.getLocation());
+		Long getLocationId = locationMapper.findLocationId(changePostDto.getLocation());
 
 		String imageName = changePostDto.getImageName();
 		// Long imageId = imageMapper.findImage(imageName);
 		Long imageId = 1L;
 
 		Long hasFind = postMapper.findPostById(postId);
-		if (ObjectUtils.isEmpty(hasFind)){
+		if (ObjectUtils.isEmpty(hasFind)) {
 			throw new NoSuchPostException("Post Find Failed :: ID = " + postId);
 		}
 
-		Post changePostInfo = changePostDto.toEntity(hasFind, locationId, imageId);
+		Post changePostInfo = changePostDto.toEntity(hasFind, getLocationId, imageId);
 
 		int hasChanged = postMapper.changePost(changePostInfo);
 		if (hasChanged < 1) {
@@ -106,6 +108,7 @@ public class PostService {
 		}
 		return changePostInfo;
 	}
+
 
 	private List<FindPostDto> toDtoList(List<Post> posts) {
 		List<FindPostDto> postDtoList = new ArrayList<>();

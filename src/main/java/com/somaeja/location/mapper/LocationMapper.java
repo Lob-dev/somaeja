@@ -10,10 +10,10 @@ public interface LocationMapper {
 
 	Long findLocationId(String searchLocation);
 
-	List<String> findByCity(String searchString);
+	List<String> findByCity(String cityName);
 
-	List<String> findByCityCountry(String searchString);
+	List<String> findByCityCountry(String cityCountryName);
 
-	List<String> findByTown(String searchString);
+	List<String> findByTown(String town);
 
 }
