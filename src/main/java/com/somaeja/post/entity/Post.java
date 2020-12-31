@@ -23,8 +23,8 @@ public class Post {
 	private final Long price;
 	private final boolean isNegotiable;
 	private final boolean isOfflineTrade;
-	private final LocalDateTime createdDate;
-	private final LocalDateTime modifyDate;
+	private final String createdDate;
+	private final String modifyDate;
 	private final String cityCountryTown;
 
 }

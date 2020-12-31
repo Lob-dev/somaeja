@@ -42,8 +42,8 @@ public class CreatePostDto {
 			.imageId(imageId)
 			.isNegotiable(isNegotiable)
 			.isOfflineTrade(isOfflineTrade)
-			.createdDate(LocalDateTime.now())
-			.modifyDate(LocalDateTime.now())
+			.createdDate(LocalDateTime.now().toString())
+			.modifyDate(LocalDateTime.now().toString())
 			.build();
 	}
 }
