@@ -51,7 +51,7 @@ public class ModifyPostDto {
 			.imageId(imageId)
 			.isNegotiable(isNegotiable)
 			.isOfflineTrade(isOfflineTrade)
-			.modifyDate(LocalDateTime.now().toString())
+			.modifyDate(LocalDateTime.now())
 			.build();
 	}
 }

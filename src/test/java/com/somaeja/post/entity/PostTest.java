@@ -32,8 +32,8 @@ class PostTest {
 			.title("title")
 			.content("content")
 			.price(10_000L)
-			.createdDate(createTime.toString())
-			.modifyDate(createTime.toString())
+			.createdDate(createTime)
+			.modifyDate(createTime)
 			.isNegotiable(false)
 			.isOfflineTrade(false)
 			.userId(1L)
@@ -46,8 +46,8 @@ class PostTest {
 			() -> assertEquals("title", post.getTitle()),
 			() -> assertEquals("content", post.getContent()),
 			() -> assertEquals(Long.valueOf(10_000), post.getPrice()),
-			() -> assertEquals(createTime.toString(), post.getCreatedDate()),
-			() -> assertEquals(createTime.toString(), post.getModifyDate()),
+			() -> assertEquals(createTime, post.getCreatedDate()),
+			() -> assertEquals(createTime, post.getModifyDate()),
 			() -> assertFalse(post.isNegotiable()),
 			() -> assertFalse(post.isOfflineTrade()),
 			() -> assertEquals(Long.valueOf(1), post.getUserId()),
@@ -65,8 +65,8 @@ class PostTest {
 				.title("title")
 				.content("content")
 				.price(10_000L)
-				.createdDate(LocalDateTime.now().toString())
-				.modifyDate(LocalDateTime.now().toString())
+				.createdDate(LocalDateTime.now())
+				.modifyDate(LocalDateTime.now())
 				.isNegotiable(false)
 				.isOfflineTrade(false)
 				.userId(1L)
