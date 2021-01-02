@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/somaeja?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    username: lob
+    password: eodend101@@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: main.resources.mybatis.mapper
