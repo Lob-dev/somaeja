@@ -47,14 +47,14 @@
         SELECT POST.*, LOCATION.CITY_COUNTRY_TOWN as location
         FROM POST INNER JOIN LOCATION
         ON POST.LOCATION_ID = LOCATION.LOCATION_ID
-        WHERE TITLE LIKE CONCAT('%',#{searchTitle},'%')
+        WHERE TITLE LIKE '%${searchTitle}%'
     </select>
 
     <select id="findByContent" resultType="com.somaeja.post.entity.Post" parameterType="string">
         SELECT POST.*, LOCATION.CITY_COUNTRY_TOWN as location
         FROM POST INNER JOIN LOCATION
         ON POST.LOCATION_ID = LOCATION.LOCATION_ID
-        WHERE CONTENT LIKE CONCAT('%',#{searchContent},'%')
+        WHERE CONTENT LIKE '%${searchContent}%'
     </select>
 
     <select id="findByLocation" resultType="com.somaeja.post.entity.Post" parameterType="long">

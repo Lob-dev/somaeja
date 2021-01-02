@@ -7,6 +7,5 @@ spring:
     console:
       enabled: true
 
-
 mybatis:
   mapper-locations: main.resources.mybatis.mapper
