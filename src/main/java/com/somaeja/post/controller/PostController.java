@@ -1,5 +1,6 @@
 package com.somaeja.post.controller;
 
+import com.somaeja.location.service.LocationService;
 import com.somaeja.post.controller.response.PostInfo;
 import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.FindPostDto;
@@ -20,6 +21,7 @@ import java.util.List;
 public class PostController {
 
 	private final PostService postService;
+	private final LocationService locationService;
 
 	@PostMapping("/posts")
 	public ResponseEntity<PostInfo> createPostInfo(@Valid @RequestBody CreatePostDto postDto) {
@@ -85,5 +87,16 @@ public class PostController {
 	public ResponseEntity<PostInfo> changePostInfo(@PathVariable Long postId, @Valid @RequestBody ModifyPostDto modifyPostDto){
 		Post post = postService.changePostInfo(postId, modifyPostDto);
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(post.getId(), "post updated!"));
+	}
+
+	@GetMapping(value = "/locations", produces = "application/json; charset=UTF8")
+	public ResponseEntity<List<String>> findLocations(
+		@RequestParam(value = "location", required = false) String locationOfQuery) {
+
+		List<String> locations = locationService.getLocationList(locationOfQuery);
+		if (CollectionUtils.isEmpty(locations)){
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(locations);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(locations);
 	}
 }
