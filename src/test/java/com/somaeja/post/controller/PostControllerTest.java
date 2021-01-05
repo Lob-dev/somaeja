@@ -189,7 +189,7 @@ class PostControllerTest {
 	@DisplayName("find post By user - 실패, 잘못된 타입의 값이 넘어왔을 경우")
 	void findPostByUser_BadRequest_WrongType() throws Exception {
 		// Then
-		mockMvc.perform(get("/users/{userId}/posts", "1L"))
+		mockMvc.perform(get("/users/{userId}/posts", "L"))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
@@ -227,7 +227,7 @@ class PostControllerTest {
 		// Then
 		mockMvc.perform(delete("/posts/{postId}" , 1213124415))
 			.andDo(print())
-			.andExpect(status().isNotFound());
+			.andExpect(status().isNoContent());
 	}
 
 	@Test
@@ -261,28 +261,6 @@ class PostControllerTest {
 		// Then
 		mockMvc.perform(put("/posts/{postId}", 1123241L)
 			.content(objectMapper.writeValueAsString(modifyDto))
-			.contentType(MediaType.APPLICATION_JSON))
-			.andDo(print())
-			.andExpect(status().isNotFound());
-	}
-
-	@Test
-	@DisplayName("find locations by query")
-	void findLocations() throws Exception {
-
-		// Then
-		mockMvc.perform(get("/locations?location=서울")
-			.contentType(MediaType.APPLICATION_JSON))
-			.andDo(print())
-			.andExpect(status().isOk());
-	}
-
-	@Test
-	@DisplayName("find locations by query - 키워드에 맞는 데이터가 없는 경우")
-	void findLocations_NoContent() throws Exception {
-
-		// Then
-		mockMvc.perform(get("/locations?location=AAA")
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isNoContent());

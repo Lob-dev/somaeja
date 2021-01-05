@@ -1,6 +1,5 @@
 package com.somaeja.post.controller;
 
-import com.somaeja.location.service.LocationService;
 import com.somaeja.post.controller.response.PostInfo;
 import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.FindPostDto;
@@ -18,10 +17,10 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(produces = "application/json; charset=UTF8")
 public class PostController {
 
 	private final PostService postService;
-	private final LocationService locationService;
 
 	@PostMapping("/posts")
 	public ResponseEntity<PostInfo> createPostInfo(@Valid @RequestBody CreatePostDto postDto) {
@@ -30,7 +29,7 @@ public class PostController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(PostInfo.from(post.getId(), "post created!"));
 	}
 
-	@GetMapping(value = "/posts", produces = "application/json; charset=UTF8")
+	@GetMapping(value = "/posts")
 	public ResponseEntity<List<FindPostDto>> findPostAll(
 		@RequestParam(value = "title", required = false) String titleOfQuery,
 		@RequestParam(value = "content", required = false) String contentOfQuery) {
@@ -59,7 +58,7 @@ public class PostController {
 		}
 	}
 
-	@GetMapping(value = "/locations/{locationId}/posts", produces = "application/json; charset=UTF8")
+	@GetMapping(value = "/locations/{locationId}/posts")
 	public ResponseEntity<List<FindPostDto>> findPostByLocation(@PathVariable Long locationId) {
 		List<FindPostDto> posts = postService.findByLocation(locationId);
 		if (CollectionUtils.isEmpty(posts)) {
@@ -68,7 +67,7 @@ public class PostController {
 		return ResponseEntity.status(HttpStatus.OK).body(posts);
 	}
 
-	@GetMapping(value = "/users/{userId}/posts", produces = "application/json; charset=UTF8")
+	@GetMapping(value = "/users/{userId}/posts")
 	public ResponseEntity<List<FindPostDto>> findPostByUser(@PathVariable Long userId) {
 		List<FindPostDto> posts = postService.findByUser(userId);
 		if (CollectionUtils.isEmpty(posts)) {
@@ -89,14 +88,4 @@ public class PostController {
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(post.getId(), "post updated!"));
 	}
 
-	@GetMapping(value = "/locations", produces = "application/json; charset=UTF8")
-	public ResponseEntity<List<String>> findLocations(
-		@RequestParam(value = "location", required = false) String locationOfQuery) {
-
-		List<String> locations = locationService.getLocationList(locationOfQuery);
-		if (CollectionUtils.isEmpty(locations)){
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(locations);
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(locations);
-	}
 }
