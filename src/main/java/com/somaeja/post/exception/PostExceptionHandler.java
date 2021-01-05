@@ -1,6 +1,7 @@
 package com.somaeja.post.exception;
 
 import com.somaeja.global.exception.ErrorResponse;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 // Post Domain 용
+@Order(0)
 @ControllerAdvice
 public class PostExceptionHandler {
 
@@ -30,7 +32,7 @@ public class PostExceptionHandler {
 	@ExceptionHandler(NoSuchPostException.class)
 	protected ResponseEntity<ErrorResponse> handleNoSuchPostException(NoSuchPostException exception) {
 		final ErrorResponse response = ErrorResponse.from(exception.getMessage(), null);
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 	}
 
 	// Post Modify Exception Handler
