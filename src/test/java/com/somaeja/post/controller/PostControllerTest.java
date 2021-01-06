@@ -189,7 +189,7 @@ class PostControllerTest {
 	@DisplayName("find post By user - 실패, 잘못된 타입의 값이 넘어왔을 경우")
 	void findPostByUser_BadRequest_WrongType() throws Exception {
 		// Then
-		mockMvc.perform(get("/users/{userId}/posts", "1L"))
+		mockMvc.perform(get("/users/{userId}/posts", "L"))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
@@ -227,7 +227,7 @@ class PostControllerTest {
 		// Then
 		mockMvc.perform(delete("/posts/{postId}" , 1213124415))
 			.andDo(print())
-			.andExpect(status().isNotFound());
+			.andExpect(status().isNoContent());
 	}
 
 	@Test
@@ -263,6 +263,7 @@ class PostControllerTest {
 			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
-			.andExpect(status().isNotFound());
+			.andExpect(status().isNoContent());
 	}
+
 }

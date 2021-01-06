@@ -17,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(produces = "application/json; charset=UTF8")
 public class PostController {
 
 	private final PostService postService;
@@ -28,7 +29,7 @@ public class PostController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(PostInfo.from(post.getId(), "post created!"));
 	}
 
-	@GetMapping(value = "/posts", produces = "application/json; charset=UTF8")
+	@GetMapping(value = "/posts")
 	public ResponseEntity<List<FindPostDto>> findPostAll(
 		@RequestParam(value = "title", required = false) String titleOfQuery,
 		@RequestParam(value = "content", required = false) String contentOfQuery) {
@@ -57,7 +58,7 @@ public class PostController {
 		}
 	}
 
-	@GetMapping(value = "/locations/{locationId}/posts", produces = "application/json; charset=UTF8")
+	@GetMapping(value = "/locations/{locationId}/posts")
 	public ResponseEntity<List<FindPostDto>> findPostByLocation(@PathVariable Long locationId) {
 		List<FindPostDto> posts = postService.findByLocation(locationId);
 		if (CollectionUtils.isEmpty(posts)) {
@@ -66,7 +67,7 @@ public class PostController {
 		return ResponseEntity.status(HttpStatus.OK).body(posts);
 	}
 
-	@GetMapping(value = "/users/{userId}/posts", produces = "application/json; charset=UTF8")
+	@GetMapping(value = "/users/{userId}/posts")
 	public ResponseEntity<List<FindPostDto>> findPostByUser(@PathVariable Long userId) {
 		List<FindPostDto> posts = postService.findByUser(userId);
 		if (CollectionUtils.isEmpty(posts)) {
@@ -86,4 +87,5 @@ public class PostController {
 		Post post = postService.changePostInfo(postId, modifyPostDto);
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(post.getId(), "post updated!"));
 	}
+
 }

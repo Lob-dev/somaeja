@@ -14,22 +14,10 @@
         WHERE LOCATION_ID = #{locationId}
     </select>
 
-    <select id="findByCity" resultType="string" parameterType="string">
+    <select id="findByLocations" resultType="string" parameterType="string">
         SELECT CITY_COUNTRY_TOWN
         FROM LOCATION
-        WHERE CITY LIKE '%${cityName}%'
-    </select>
-
-    <select id="findByCityCountry" resultType="string" parameterType="string">
-        SELECT CITY_COUNTRY_TOWN
-        FROM LOCATION
-        WHERE CITY_COUNTRY LIKE '%${cityCountryName}%'
-    </select>
-
-    <select id="findByTown" resultType="string" parameterType="string">
-        SELECT CITY_COUNTRY_TOWN
-        FROM LOCATION
-        WHERE TOWN LIKE '%${town}%'
+        WHERE CITY_COUNTRY_TOWN LIKE '%${searchArea}%'
     </select>
 
 </mapper>
