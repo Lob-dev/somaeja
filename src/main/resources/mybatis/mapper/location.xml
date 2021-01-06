@@ -17,7 +17,7 @@
     <select id="findByLocations" resultType="string" parameterType="string">
         SELECT CITY_COUNTRY_TOWN
         FROM LOCATION
-        WHERE CITY_COUNTRY_TOWN LIKE '%${searchKeyword}%'
+        WHERE CITY_COUNTRY_TOWN LIKE '%${searchArea}%'
     </select>
 
 </mapper>

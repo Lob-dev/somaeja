@@ -24,7 +24,7 @@ class LocationControllerTest {
 	void findLocations() throws Exception {
 
 		// Then
-		mockMvc.perform(get("/locations?location=서울")
+		mockMvc.perform(get("/locations?area=서울")
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isOk());
@@ -35,7 +35,7 @@ class LocationControllerTest {
 	void findLocations_NoContent() throws Exception {
 
 		// Then
-		mockMvc.perform(get("/locations?location=AAA")
+		mockMvc.perform(get("/locations?area=AAA")
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isNoContent());

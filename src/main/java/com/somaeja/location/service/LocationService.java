@@ -12,8 +12,8 @@ public class LocationService {
 
 	private final LocationMapper locationMapper;
 
-	public List<String> getLocationList(String searchKeyword) {
-		return locationMapper.findByLocations(searchKeyword);
+	public List<String> getLocationList(String searchArea) {
+		return locationMapper.findByLocations(searchArea);
 	}
 
 }

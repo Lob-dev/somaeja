@@ -21,9 +21,9 @@ public class LocationController {
 
 	@GetMapping(value = "/locations")
 	public ResponseEntity<List<String>> findLocations(
-		@RequestParam(value = "location", required = false) String locationOfQuery) {
+		@RequestParam(value = "area", required = false) String areaOfQuery) {
 
-		List<String> locations = locationService.getLocationList(locationOfQuery);
+		List<String> locations = locationService.getLocationList(areaOfQuery);
 		if (CollectionUtils.isEmpty(locations)) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(locations);
 		}

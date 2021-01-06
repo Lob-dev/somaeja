@@ -10,6 +10,6 @@ public interface LocationMapper {
 
 	Long findLocationId(String searchLocation);
 
-	List<String> findByLocations(String searchKeyword);
+	List<String> findByLocations(String searchArea);
 
 }
