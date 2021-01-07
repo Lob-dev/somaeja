@@ -9,3 +9,30 @@ spring:
 
 mybatis:
   mapper-locations: main.resources.mybatis.mapper
+
+logging:
+  level:
+
+    root:
+      level: warn
+      additivity: false
+
+    com:
+      somaeja:
+        post:
+          service:
+            PostService:
+              level: info
+              additivity: false
+
+        global:
+          exception:
+            GlobalExceptionHandler:
+              level: error
+              additivity: false
+
+  file:
+    path: /logs/dev
+
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss
