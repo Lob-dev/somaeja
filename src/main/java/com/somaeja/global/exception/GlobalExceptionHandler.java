@@ -1,11 +1,13 @@
 package com.somaeja.global.exception;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+@Log4j2
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -19,6 +21,8 @@ public class GlobalExceptionHandler {
 	// 예상하지 못한 Exception Catch = 클라이언트의 White Page 를 방지하기 위함
 	@ExceptionHandler(Exception.class)
 	protected ResponseEntity<ErrorResponse> handleException(Exception exception) {
+		log.error("throw exception = {} : exception message = {} ", exception.getClass().getSimpleName(), exception.getLocalizedMessage());
+
 		final ErrorResponse response = ErrorResponse.from();
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 	}
