@@ -10,6 +10,7 @@ import com.somaeja.post.exception.NoSuchPostException;
 import com.somaeja.post.exception.SavePostFailedException;
 import com.somaeja.post.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -17,6 +18,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -36,9 +38,10 @@ public class PostService {
 
 		int hasSaved = postMapper.save(savePostInfo);
 		if (hasSaved < 1) {
-			// controller advice 에서 catch..? -> internal Server Error
-			throw new SavePostFailedException("Save Failed :: TITLE ="
-				+ savePostInfo.getTitle() + " USER ID =" + userId);
+			log.info("post save Failed : user id = {} : The error may be caused by a internal server error ", userId);
+
+			throw new SavePostFailedException("Save Failed : title = "
+				+ savePostInfo.getTitle() + " user id =" + userId);
 		}
 
 		return savePostInfo;
@@ -81,7 +84,9 @@ public class PostService {
 	public void deletePostInfo(Long postId) {
 		int hasDeleted = postMapper.deletePost(postId);
 		if (hasDeleted < 1) {
-			throw new NoSuchPostException("Delete Post Fail :: ID = " + postId);
+			log.info("post delete failed : post id = {} : The error may have occurred because there is no post ID. ", postId);
+
+			throw new NoSuchPostException(" post delete failed : post id = " + postId);
 		}
 	}
 
@@ -96,15 +101,19 @@ public class PostService {
 
 		Long hasFind = postMapper.findPostById(postId);
 		if (ObjectUtils.isEmpty(hasFind)) {
-			throw new NoSuchPostException("Post Find Failed :: ID = " + postId);
+			log.info("post find failed : post id = {} : The error may have occurred because there is no post ID. ", postId);
+
+			throw new NoSuchPostException(" post find failed : post id = " + postId);
 		}
 
 		Post changePostInfo = changePostDto.toEntity(hasFind, getLocationId, imageId);
 
 		int hasChanged = postMapper.changePost(changePostInfo);
 		if (hasChanged < 1) {
+			log.info("post changed failed : post id = {} : The error may be caused by a internal server error ", postId);
+
 			throw new ModifyPostFailedException(
-				"Change Post Fail :: ID = " + hasFind + " USER ID =" + changePostDto.getUserId());
+				" post changed failed : post id = " + hasFind +" : user id = " + changePostDto.getUserId());
 		}
 		return changePostInfo;
 	}
