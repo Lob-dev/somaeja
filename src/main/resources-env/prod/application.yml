@@ -30,7 +30,7 @@ logging:
               additivity: false
 
   file:
-    path: /logs/dev
+    path: /logs/somaeja
 
   pattern:
     dateformat: yyyy-MM-dd HH:mm:ss

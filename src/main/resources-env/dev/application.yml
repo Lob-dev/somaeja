@@ -14,16 +14,12 @@ logging:
   level:
 
     root:
-      level: warn
-      additivity: false
+      level: debug
 
     com:
       somaeja:
-        post:
-          service:
-            PostService:
-              level: info
-              additivity: false
+        level: debug
+        additivity: false
 
         global:
           exception:
