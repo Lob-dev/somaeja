@@ -21,6 +21,6 @@ public class User {
 	private final String role;
 	private final LocalDateTime createdDate;
 	private final LocalDateTime modifyDate;
-	private final String loaction;
+	private final String location;
 
 }

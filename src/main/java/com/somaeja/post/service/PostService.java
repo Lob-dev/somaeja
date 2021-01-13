@@ -50,33 +50,28 @@ public class PostService {
 	// Post Find
 	@Transactional(readOnly = true)
 	public List<FindPostDto> findByAll() {
-		List<Post> posts = postMapper.findByAll();
-		return toDtoList(posts);
+		return toDtoList(postMapper.findByAll());
 	}
 
 	@Transactional(readOnly = true)
 	public List<FindPostDto> findByTitle(String searchTitle) {
-		List<Post> posts = postMapper.findByTitle(searchTitle);
-		return toDtoList(posts);
+		return toDtoList(postMapper.findByTitle(searchTitle));
 	}
 
 	@Transactional(readOnly = true)
 	public List<FindPostDto> findByContent(String searchContent) {
-		List<Post> posts = postMapper.findByContent(searchContent);
-		return toDtoList(posts);
+		return toDtoList(postMapper.findByContent(searchContent));
 	}
 
 	@Transactional(readOnly = true)
 	public List<FindPostDto> findByLocation(Long locationId) {
 		// location 정보 조회, ID 반환 location
-		List<Post> posts = postMapper.findByLocation(locationId);
-		return toDtoList(posts);
+		return toDtoList(postMapper.findByLocation(locationId));
 	}
 
 	@Transactional(readOnly = true)
 	public List<FindPostDto> findByUser(Long userId) {
-		List<Post> posts = postMapper.findByUser(userId);
-		return toDtoList(posts);
+		return toDtoList(postMapper.findByUser(userId));
 	}
 
 
@@ -91,7 +86,6 @@ public class PostService {
 	}
 
 	// Post Modify
-	@Transactional
 	public Post changePostInfo(Long postId, ModifyPostDto changePostDto) {
 		Long getLocationId = locationMapper.findLocationId(changePostDto.getLocation());
 
@@ -113,19 +107,18 @@ public class PostService {
 			log.info("post changed failed : post id = {} : The error may be caused by a internal server error ", postId);
 
 			throw new ChangePostFailedException(
-				" post changed failed : post id = " + hasFind +" : user id = " + changePostDto.getUserId());
+				" post changed failed : post id = " + hasFind + " : user id = " + changePostDto.getUserId());
 		}
 		return changePostInfo;
 	}
 
 
 	private List<FindPostDto> toDtoList(List<Post> posts) {
-		List<FindPostDto> postDtoList = new ArrayList<>();
+		List<FindPostDto> list = new ArrayList<>(posts.size());
 		for (Post post : posts) {
-			FindPostDto postDto = FindPostDto.of(post);
-			postDtoList.add(postDto);
+			list.add(FindPostDto.of(post));
 		}
-		return postDtoList;
+		return list;
 	}
 
 	private boolean wasReflected(int hasDeleted) {

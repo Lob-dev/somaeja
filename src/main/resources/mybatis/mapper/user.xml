@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.somaeja.user.mapper.UserMapper">
 
-    <insert id="save" parameterType="com.somaeja.user.entity.User" useGeneratedKeys="true" keyProperty="id">
+    <insert id="register" parameterType="com.somaeja.user.entity.User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO USER
         (
          LOCATION_ID,
@@ -54,14 +54,14 @@
         WHERE NICKNAME = #{searchName}
     </select>
 
-    <update id="modifyOfEmail" parameterType="com.somaeja.user.dto.ModifyMailDto">
+    <update id="modifyOfEmail" parameterType="com.somaeja.user.dto.ModifyEmailDto">
         UPDATE USER
         SET    EMAIL = #{email},
                MODIFYDATE = NOW()
         WHERE  USER_ID = #{id}
     </update>
 
-    <update id="modifyOfPassword" parameterType="hashMap">
+    <update id="modifyOfPassword" parameterType="com.somaeja.user.dto.ModifyPasswordDto">
         UPDATE USER
         SET    PASSWORD = #{password},
                MODIFYDATE = NOW()
@@ -74,5 +74,11 @@
                MODIFYDATE = NOW()
         WHERE USER_ID = #{id}
     </update>
+
+    <select id="isDuplicateUserInfo" resultType="boolean" parameterType="string">
+        SELECT COUNT(*)
+        FROM USER
+        WHERE EMAIL = #{email}
+    </select>
 
 </mapper>
