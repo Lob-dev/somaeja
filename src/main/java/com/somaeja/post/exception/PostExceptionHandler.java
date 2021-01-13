@@ -11,7 +11,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 // Post Domain 용
 @Order(0)
-@ControllerAdvice
+@ControllerAdvice(basePackages = "com.somaeja.post")
 public class PostExceptionHandler {
 
 	// Valid Exception Handler
@@ -36,8 +36,8 @@ public class PostExceptionHandler {
 	}
 
 	// Post Modify Exception Handler
-	@ExceptionHandler(ModifyPostFailedException.class)
-	protected ResponseEntity<ErrorResponse> handleModifyPostFailedException(ModifyPostFailedException exception) {
+	@ExceptionHandler(ChangePostFailedException.class)
+	protected ResponseEntity<ErrorResponse> handleModifyPostFailedException(ChangePostFailedException exception) {
 		final ErrorResponse response = ErrorResponse.from(exception.getMessage(), null);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 	}

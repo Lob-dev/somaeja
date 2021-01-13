@@ -5,7 +5,7 @@ import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.FindPostDto;
 import com.somaeja.post.dto.ModifyPostDto;
 import com.somaeja.post.entity.Post;
-import com.somaeja.post.exception.ModifyPostFailedException;
+import com.somaeja.post.exception.ChangePostFailedException;
 import com.somaeja.post.exception.NoSuchPostException;
 import com.somaeja.post.exception.SavePostFailedException;
 import com.somaeja.post.mapper.PostMapper;
@@ -36,8 +36,8 @@ public class PostService {
 		long imageId = 1;
 		Post savePostInfo = createDto.toEntity(userId, getLocationId, imageId);
 
-		int hasSaved = postMapper.save(savePostInfo);
-		if (hasSaved < 1) {
+		int result = postMapper.save(savePostInfo);
+		if (wasReflected(result)) {
 			log.info("post save Failed : user id = {} : The error may be caused by a internal server error ", userId);
 
 			throw new SavePostFailedException("Save Failed : title = "
@@ -82,8 +82,8 @@ public class PostService {
 
 	// Post Delete
 	public void deletePostInfo(Long postId) {
-		int hasDeleted = postMapper.deletePost(postId);
-		if (hasDeleted < 1) {
+		int result = postMapper.deletePost(postId);
+		if (wasReflected(result)) {
 			log.info("post delete failed : post id = {} : The error may have occurred because there is no post ID. ", postId);
 
 			throw new NoSuchPostException(" post delete failed : post id = " + postId);
@@ -108,11 +108,11 @@ public class PostService {
 
 		Post changePostInfo = changePostDto.toEntity(hasFind, getLocationId, imageId);
 
-		int hasChanged = postMapper.changePost(changePostInfo);
-		if (hasChanged < 1) {
+		int result = postMapper.changePost(changePostInfo);
+		if (wasReflected(result)) {
 			log.info("post changed failed : post id = {} : The error may be caused by a internal server error ", postId);
 
-			throw new ModifyPostFailedException(
+			throw new ChangePostFailedException(
 				" post changed failed : post id = " + hasFind +" : user id = " + changePostDto.getUserId());
 		}
 		return changePostInfo;
@@ -126,5 +126,9 @@ public class PostService {
 			postDtoList.add(postDto);
 		}
 		return postDtoList;
+	}
+
+	private boolean wasReflected(int hasDeleted) {
+		return hasDeleted < 1;
 	}
 }
