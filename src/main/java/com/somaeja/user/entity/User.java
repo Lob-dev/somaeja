@@ -18,7 +18,7 @@ public class User {
 	private final String email;
 	private final String phoneNumber;
 	// 계정 권한
-	private final String role;
+	private final RoleStatus role;
 	private final LocalDateTime createdDate;
 	private final LocalDateTime modifyDate;
 	private final String location;

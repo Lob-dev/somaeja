@@ -30,7 +30,7 @@ public class UserController {
 	private final UserService userService;
 
 	// User 생성
-	@PostMapping("/register")
+	@PostMapping("/users/register")
 	public ResponseEntity<String> register(@Valid @RequestBody CreateUserDto userDto) {
 		userService.register(userDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body("registration completed");
@@ -40,7 +40,7 @@ public class UserController {
 
 	// User Find
 	// Login 시 사용
-	@GetMapping("/profile")
+	@GetMapping("/users/profile")
 	public ResponseEntity<FindUserDto> getUserProfile() {
 		// 세션의 user Id 정보 사용 session.getAttribute("id");
 		FindUserDto user = userService.findById(1L);
@@ -63,19 +63,19 @@ public class UserController {
 	// 세션 기반 로그인 기능 생성 후에는 세션에 담긴 ID 값을 사용하도록 변경
 
 	@PatchMapping("/users/{userId}/mail")
-	public ResponseEntity<String> modifyEmail(@RequestParam(value = "email") String setEmail, @PathVariable Long userId) {
+	public ResponseEntity<String> modifyEmail(@RequestBody String setEmail, @PathVariable Long userId) {
 		userService.modifyOfEmail(new ModifyEmailDto(userId, setEmail));
 		return ResponseEntity.status(HttpStatus.OK).body("modified completed");
 	}
 
 	@PatchMapping("/users/{userId}/password")
-	public ResponseEntity<String> modifyPassword(@RequestParam(value = "password") String setPassword, @PathVariable Long userId) {
+	public ResponseEntity<String> modifyPassword(@RequestBody String setPassword, @PathVariable Long userId) {
 		userService.modifyOfPassword(new ModifyPasswordDto(userId, setPassword));
 		return ResponseEntity.status(HttpStatus.OK).body("modified completed");
 	}
 
 	@PatchMapping("/users/{userId}/nickname")
-	public ResponseEntity<String> modifyNickname(@RequestParam(value = "nickname") String setNickname, @PathVariable Long userId) {
+	public ResponseEntity<String> modifyNickname(@RequestBody String setNickname, @PathVariable Long userId) {
 		userService.modifyOfNickname(new ModifyNicknameDto(userId, setNickname));
 		return ResponseEntity.status(HttpStatus.OK).body("modified completed");
 	}

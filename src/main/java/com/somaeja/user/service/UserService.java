@@ -16,8 +16,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -44,7 +44,7 @@ public class UserService {
 		}
 
 		int result = userMapper.register(saveUserInfo);
-		if (wasReflected(result)) {
+		if (isNotReflected(result)) {
 			log.info("user save failed : The error may be caused by a internal server error ");
 
 			throw new SaveUserFailedException("User Save Failed");
@@ -78,7 +78,7 @@ public class UserService {
 	// User Modify
 	public void modifyOfEmail(ModifyEmailDto mailDto) {
 
-		if (wasReflected(userMapper.modifyOfEmail(mailDto))) {
+		if (isNotReflected(userMapper.modifyOfEmail(mailDto))) {
 			log.info("user modify failed by email : user id = {}",mailDto.getId());
 
 			throw new ModifyUserFailedException(" user modify failed by email : user id = " + mailDto.getId());
@@ -88,7 +88,7 @@ public class UserService {
 	public void modifyOfPassword(ModifyPasswordDto passwordDto) {
 		ModifyPasswordDto encodeDto = new ModifyPasswordDto(passwordDto.getId(), passwordDto.getEncodedPassword());
 
-		if (wasReflected(userMapper.modifyOfPassword(encodeDto))) {
+		if (isNotReflected(userMapper.modifyOfPassword(encodeDto))) {
 			log.info("user modify failed by password : user id = {}", encodeDto.getId());
 
 			throw new ModifyUserFailedException(" user modify failed by password : user id = " + passwordDto.getId());
@@ -97,7 +97,7 @@ public class UserService {
 
 	public void modifyOfNickname(ModifyNicknameDto nicknameDto) {
 
-		if (wasReflected(userMapper.modifyOfNickname(nicknameDto))) {
+		if (isNotReflected(userMapper.modifyOfNickname(nicknameDto))) {
 			log.info("user modify failed by nickname : user id = {}", nicknameDto.getId());
 
 			throw new ModifyUserFailedException(" user modify failed by nickname : user id = " + nicknameDto.getId());
@@ -105,13 +105,11 @@ public class UserService {
 	}
 
 	private List<FindUserDto> toDtoList(List<User> users) {
-		List<FindUserDto> list = new ArrayList<>(users.size());
-		for (User user : users) {
-			list.add(FindUserDto.of(user));
-		}
-		return list;
+		return users.stream()
+			.map(FindUserDto::of)
+			.collect(Collectors.toList());
 	}
-	private boolean wasReflected(int hasDeleted) {
-		return hasDeleted < 1;
+	private boolean isNotReflected(int result) {
+		return result < 1;
 	}
 }

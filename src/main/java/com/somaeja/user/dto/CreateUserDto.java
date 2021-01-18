@@ -37,7 +37,7 @@ public class CreateUserDto {
 			.password(SHA256Utils.encode(password))
 			.email(email)
 			.phoneNumber(phoneNumber)
-			.role(RoleStatus.getRoleUser())
+			.role(RoleStatus.USER)
 			.createdDate(LocalDateTime.now())
 			.modifyDate(LocalDateTime.now())
 			.build();

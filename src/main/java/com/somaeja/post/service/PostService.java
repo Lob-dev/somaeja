@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -37,7 +37,7 @@ public class PostService {
 		Post savePostInfo = createDto.toEntity(userId, getLocationId, imageId);
 
 		int result = postMapper.save(savePostInfo);
-		if (wasReflected(result)) {
+		if (isNotReflected(result)) {
 			log.info("post save Failed : user id = {} : The error may be caused by a internal server error ", userId);
 
 			throw new SavePostFailedException("Save Failed : title = "
@@ -78,7 +78,7 @@ public class PostService {
 	// Post Delete
 	public void deletePostInfo(Long postId) {
 		int result = postMapper.deletePost(postId);
-		if (wasReflected(result)) {
+		if (isNotReflected(result)) {
 			log.info("post delete failed : post id = {} : The error may have occurred because there is no post ID. ", postId);
 
 			throw new NoSuchPostException(" post delete failed : post id = " + postId);
@@ -103,7 +103,7 @@ public class PostService {
 		Post changePostInfo = changePostDto.toEntity(hasFind, getLocationId, imageId);
 
 		int result = postMapper.changePost(changePostInfo);
-		if (wasReflected(result)) {
+		if (isNotReflected(result)) {
 			log.info("post changed failed : post id = {} : The error may be caused by a internal server error ", postId);
 
 			throw new ChangePostFailedException(
@@ -114,14 +114,12 @@ public class PostService {
 
 
 	private List<FindPostDto> toDtoList(List<Post> posts) {
-		List<FindPostDto> list = new ArrayList<>(posts.size());
-		for (Post post : posts) {
-			list.add(FindPostDto.of(post));
-		}
-		return list;
+		return posts.stream()
+			.map(FindPostDto::of)
+			.collect(Collectors.toList());
 	}
 
-	private boolean wasReflected(int hasDeleted) {
-		return hasDeleted < 1;
+	private boolean isNotReflected(int result) {
+		return result < 1;
 	}
 }

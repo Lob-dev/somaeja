@@ -3,6 +3,7 @@ package com.somaeja.user.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somaeja.user.dto.CreateUserDto;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -48,7 +49,7 @@ class UserControllerTest {
 	@Test
 	void userControllerTest_register() throws Exception {
 
-		mockMvc.perform(post("/register")
+		mockMvc.perform(post("/users/register")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(userDto)))
 			.andDo(print())
@@ -58,7 +59,7 @@ class UserControllerTest {
 	@Test
 	void userControllerTest_register_isDuplicated() throws Exception {
 
-		mockMvc.perform(post("/register")
+		mockMvc.perform(post("/users/register")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(duplicateDto)))
 			.andDo(print())
@@ -70,7 +71,7 @@ class UserControllerTest {
 
 		mockMvc.perform(patch("/users/{userId}/mail", 1L)
 			.contentType(MediaType.APPLICATION_JSON)
-			.param("email", "test@email.com"))
+			.content("test@email.com"))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -80,7 +81,7 @@ class UserControllerTest {
 
 		mockMvc.perform(patch("/users/{userId}/password", 1L)
 			.contentType(MediaType.APPLICATION_JSON)
-			.param("password", "testPassword"))
+			.content("testpassword"))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -88,9 +89,9 @@ class UserControllerTest {
 	@Test
 	void userControllerTest_modifyNickname() throws Exception {
 
-		mockMvc.perform(patch("/users/{userId}/nickname", 1L)
+		mockMvc.perform(patch("/users/{userId}/nickname", 2L)
 			.contentType(MediaType.APPLICATION_JSON)
-			.param("nickname", "change"))
+			.content("changed"))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -114,17 +115,18 @@ class UserControllerTest {
 	@Test
 	void userControllerTest_getUserProfile() throws Exception {
 
-		mockMvc.perform(get("/profile"))
+		mockMvc.perform(get("/users/profile"))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
 
 	@Test
+	@Disabled
 	void userControllerTest_getUserProfile_notFounds() throws Exception {
 
-		mockMvc.perform(get("/profile"))
+		mockMvc.perform(get("/users/profile"))
 			.andDo(print())
-			.andExpect(status().isOk());
+			.andExpect(status().isNotFound());
 	}
 
 }
