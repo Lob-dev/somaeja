@@ -2,6 +2,7 @@ package com.somaeja.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somaeja.user.dto.CreateUserDto;
+import com.somaeja.user.dto.ModifyProfilesDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ class UserControllerTest {
 
 	CreateUserDto duplicateDto;
 
+	ModifyProfilesDto profilesDto;
 
 	@BeforeEach
 	void init() {
@@ -43,6 +45,11 @@ class UserControllerTest {
 			"testPassword",
 			"lob@kakao.com",
 			"222-2222-2222");
+
+		profilesDto = new ModifyProfilesDto(null,
+			"nickname",
+			"password",
+			"email");
 	}
 
 
@@ -69,32 +76,13 @@ class UserControllerTest {
 	@Test
 	void userControllerTest_modifyEmail() throws Exception {
 
-		mockMvc.perform(patch("/users/{userId}/mail", 1L)
+		mockMvc.perform(patch("/users/profile")
 			.contentType(MediaType.APPLICATION_JSON)
-			.content("test@email.com"))
+			.content(objectMapper.writeValueAsString(profilesDto)))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
 
-	@Test
-	void userControllerTest_modifyPassword() throws Exception {
-
-		mockMvc.perform(patch("/users/{userId}/password", 1L)
-			.contentType(MediaType.APPLICATION_JSON)
-			.content("testpassword"))
-			.andDo(print())
-			.andExpect(status().isOk());
-	}
-
-	@Test
-	void userControllerTest_modifyNickname() throws Exception {
-
-		mockMvc.perform(patch("/users/{userId}/nickname", 2L)
-			.contentType(MediaType.APPLICATION_JSON)
-			.content("changed"))
-			.andDo(print())
-			.andExpect(status().isOk());
-	}
 
 	@Test
 	void userControllerTest_findUsersOfName() throws Exception {

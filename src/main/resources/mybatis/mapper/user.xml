@@ -44,35 +44,23 @@
         SELECT USER.*, LOCATION.CITY_COUNTRY_TOWN as location
         FROM USER INNER JOIN LOCATION
         ON USER.LOCATION_ID = LOCATION.LOCATION_ID
-        WHERE EMAIL = #{searchEmail}
+        WHERE EMAIL = #{email}
     </select>
 
     <select id="findByName" resultType="com.somaeja.user.entity.User" parameterType="string">
         SELECT USER.*, LOCATION.CITY_COUNTRY_TOWN as location
         FROM USER INNER JOIN LOCATION
         ON USER.LOCATION_ID = LOCATION.LOCATION_ID
-        WHERE NICKNAME = #{searchName}
+        WHERE NICKNAME = #{nickName}
     </select>
 
-    <update id="modifyOfEmail" parameterType="com.somaeja.user.dto.ModifyEmailDto">
+    <update id="modifyOfProfiles" parameterType="com.somaeja.user.dto.ModifyProfilesDto">
         UPDATE USER
         SET    EMAIL = #{email},
+               PASSWORD = #{password},
+               NICKNAME = #{nickname},
                MODIFYDATE = NOW()
         WHERE  USER_ID = #{id}
-    </update>
-
-    <update id="modifyOfPassword" parameterType="com.somaeja.user.dto.ModifyPasswordDto">
-        UPDATE USER
-        SET    PASSWORD = #{password},
-               MODIFYDATE = NOW()
-        WHERE USER_ID = #{id}
-    </update>
-
-    <update id="modifyOfNickname" parameterType="com.somaeja.user.dto.ModifyNicknameDto">
-        UPDATE USER
-        SET    NICKNAME = #{nickname},
-               MODIFYDATE = NOW()
-        WHERE USER_ID = #{id}
     </update>
 
     <select id="isDuplicateUserInfo" resultType="boolean" parameterType="string">

@@ -1,8 +1,5 @@
 package com.somaeja.user.mapper;
 
-import com.somaeja.user.dto.ModifyEmailDto;
-import com.somaeja.user.dto.ModifyNicknameDto;
-import com.somaeja.user.dto.ModifyPasswordDto;
 import com.somaeja.user.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,43 +50,6 @@ class UserMapperTest {
 
 		// Then
 		assertNotEquals(new ArrayList<User>(), users);
-	}
-
-	@Test
-	void userMapperTest_modifyOfEmail() {
-		// Given
-		ModifyEmailDto mailDto = new ModifyEmailDto(1L, "change@hello.com");
-
-		// When
-		int changed = userMapper.modifyOfEmail(mailDto);
-
-		// Then
-		assertNotEquals(0, changed);
-	}
-
-	@Test
-	void userMapperTest_modifyOfPassword() {
-		// Given
-		ModifyPasswordDto passwordDto = new ModifyPasswordDto(1L, "testPassword");
-		ModifyPasswordDto encodeDto = new ModifyPasswordDto(passwordDto.getId(), passwordDto.getEncodedPassword());
-
-		// When
-		int changed = userMapper.modifyOfPassword(encodeDto);
-
-		// Then
-		assertNotEquals(0, changed);
-	}
-
-	@Test
-	void userMapperTest_modifyOfNickname() {
-		// Given
-		ModifyNicknameDto nicknameDto = new ModifyNicknameDto(3L, "changed");
-
-		// When
-		int changed = userMapper.modifyOfNickname(nicknameDto);
-
-		// Then
-		assertNotEquals(0, changed);
 	}
 
 	@Test

@@ -3,9 +3,7 @@ package com.somaeja.user.service;
 import com.somaeja.location.mapper.LocationMapper;
 import com.somaeja.user.dto.CreateUserDto;
 import com.somaeja.user.dto.FindUserDto;
-import com.somaeja.user.dto.ModifyEmailDto;
-import com.somaeja.user.dto.ModifyNicknameDto;
-import com.somaeja.user.dto.ModifyPasswordDto;
+import com.somaeja.user.dto.ModifyProfilesDto;
 import com.somaeja.user.entity.User;
 import com.somaeja.user.exception.ModifyUserFailedException;
 import com.somaeja.user.exception.SaveUserFailedException;
@@ -76,31 +74,12 @@ public class UserService {
 
 
 	// User Modify
-	public void modifyOfEmail(ModifyEmailDto mailDto) {
+	public void modifyOfProfiles(ModifyProfilesDto profilesDto) {
 
-		if (isNotReflected(userMapper.modifyOfEmail(mailDto))) {
-			log.info("user modify failed by email : user id = {}",mailDto.getId());
+		if (isNotReflected(userMapper.modifyOfProfiles(profilesDto))) {
+			log.info("user modify failed by nickname : user id = {}", profilesDto.getId());
 
-			throw new ModifyUserFailedException(" user modify failed by email : user id = " + mailDto.getId());
-		}
-	}
-
-	public void modifyOfPassword(ModifyPasswordDto passwordDto) {
-		ModifyPasswordDto encodeDto = new ModifyPasswordDto(passwordDto.getId(), passwordDto.getEncodedPassword());
-
-		if (isNotReflected(userMapper.modifyOfPassword(encodeDto))) {
-			log.info("user modify failed by password : user id = {}", encodeDto.getId());
-
-			throw new ModifyUserFailedException(" user modify failed by password : user id = " + passwordDto.getId());
-		}
-	}
-
-	public void modifyOfNickname(ModifyNicknameDto nicknameDto) {
-
-		if (isNotReflected(userMapper.modifyOfNickname(nicknameDto))) {
-			log.info("user modify failed by nickname : user id = {}", nicknameDto.getId());
-
-			throw new ModifyUserFailedException(" user modify failed by nickname : user id = " + nicknameDto.getId());
+			throw new ModifyUserFailedException(" user modify failed by profiles : user id = " + profilesDto.getId());
 		}
 	}
 

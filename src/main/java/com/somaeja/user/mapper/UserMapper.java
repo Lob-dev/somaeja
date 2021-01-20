@@ -1,8 +1,6 @@
 package com.somaeja.user.mapper;
 
-import com.somaeja.user.dto.ModifyEmailDto;
-import com.somaeja.user.dto.ModifyNicknameDto;
-import com.somaeja.user.dto.ModifyPasswordDto;
+import com.somaeja.user.dto.ModifyProfilesDto;
 import com.somaeja.user.entity.User;
 import org.springframework.stereotype.Repository;
 
@@ -19,15 +17,11 @@ public interface UserMapper {
 	User findById(Long userId);
 
 	// 계정 찾는 용도
-	User findByEmail(String searchEmail);
+	User findByEmail(String email);
 
-	List<User> findByName(String searchName);
+	List<User> findByName(String nickName);
 
-	int modifyOfEmail(ModifyEmailDto mailDto);
-
-	int modifyOfPassword(ModifyPasswordDto passwordDto);
-
-	int modifyOfNickname(ModifyNicknameDto nicknameDto);
+	int modifyOfProfiles(ModifyProfilesDto profilesDto);
 
 	boolean isDuplicateUserInfo(String email);
 }
