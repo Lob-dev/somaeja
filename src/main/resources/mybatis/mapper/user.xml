@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.somaeja.user.mapper.UserMapper">
+
+    <insert id="register" parameterType="com.somaeja.user.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO USER
+        (
+         LOCATION_ID,
+         NICKNAME,
+         PASSWORD,
+         EMAIL,
+         PHONE_NUMBER,
+         USER_ROLE,
+         CREATEDATE,
+         MODIFYDATE
+        )
+        VALUES
+        (
+         #{locationId},
+         #{nickName},
+         #{password},
+         #{email},
+         #{phoneNumber},
+         #{role},
+         #{createdDate},
+         #{modifyDate}
+        )
+    </insert>
+
+    <select id="findByAll" resultType="com.somaeja.user.entity.User">
+        SELECT USER.*, LOCATION.CITY_COUNTRY_TOWN as location
+        FROM USER INNER JOIN LOCATION
+        ON USER.LOCATION_ID = LOCATION.LOCATION_ID
+    </select>
+
+    <select id="findById" resultType="com.somaeja.user.entity.User" parameterType="long">
+        SELECT USER.*, LOCATION.CITY_COUNTRY_TOWN as location
+        FROM USER INNER JOIN LOCATION
+        ON USER.LOCATION_ID = LOCATION.LOCATION_ID
+        WHERE USER_ID = #{userId}
+    </select>
+
+    <select id="findByEmail" resultType="com.somaeja.user.entity.User" parameterType="string">
+        SELECT USER.*, LOCATION.CITY_COUNTRY_TOWN as location
+        FROM USER INNER JOIN LOCATION
+        ON USER.LOCATION_ID = LOCATION.LOCATION_ID
+        WHERE EMAIL = #{email}
+    </select>
+
+    <select id="findByName" resultType="com.somaeja.user.entity.User" parameterType="string">
+        SELECT USER.*, LOCATION.CITY_COUNTRY_TOWN as location
+        FROM USER INNER JOIN LOCATION
+        ON USER.LOCATION_ID = LOCATION.LOCATION_ID
+        WHERE NICKNAME = #{nickName}
+    </select>
+
+    <update id="modifyOfProfiles" parameterType="com.somaeja.user.dto.ModifyProfilesDto">
+        UPDATE USER
+        SET    EMAIL = #{email},
+               PASSWORD = #{password},
+               NICKNAME = #{nickname},
+               MODIFYDATE = NOW()
+        WHERE  USER_ID = #{id}
+    </update>
+
+    <select id="isDuplicateUserInfo" resultType="boolean" parameterType="string">
+        SELECT COUNT(*)
+        FROM USER
+        WHERE EMAIL = #{email}
+    </select>
+
+</mapper>

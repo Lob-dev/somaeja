@@ -5,7 +5,7 @@ import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.FindPostDto;
 import com.somaeja.post.dto.ModifyPostDto;
 import com.somaeja.post.entity.Post;
-import com.somaeja.post.exception.ModifyPostFailedException;
+import com.somaeja.post.exception.ChangePostFailedException;
 import com.somaeja.post.exception.NoSuchPostException;
 import com.somaeja.post.exception.SavePostFailedException;
 import com.somaeja.post.mapper.PostMapper;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -36,8 +36,8 @@ public class PostService {
 		long imageId = 1;
 		Post savePostInfo = createDto.toEntity(userId, getLocationId, imageId);
 
-		int hasSaved = postMapper.save(savePostInfo);
-		if (hasSaved < 1) {
+		int result = postMapper.save(savePostInfo);
+		if (isNotReflected(result)) {
 			log.info("post save Failed : user id = {} : The error may be caused by a internal server error ", userId);
 
 			throw new SavePostFailedException("Save Failed : title = "
@@ -50,40 +50,35 @@ public class PostService {
 	// Post Find
 	@Transactional(readOnly = true)
 	public List<FindPostDto> findByAll() {
-		List<Post> posts = postMapper.findByAll();
-		return toDtoList(posts);
+		return toDtoList(postMapper.findByAll());
 	}
 
 	@Transactional(readOnly = true)
 	public List<FindPostDto> findByTitle(String searchTitle) {
-		List<Post> posts = postMapper.findByTitle(searchTitle);
-		return toDtoList(posts);
+		return toDtoList(postMapper.findByTitle(searchTitle));
 	}
 
 	@Transactional(readOnly = true)
 	public List<FindPostDto> findByContent(String searchContent) {
-		List<Post> posts = postMapper.findByContent(searchContent);
-		return toDtoList(posts);
+		return toDtoList(postMapper.findByContent(searchContent));
 	}
 
 	@Transactional(readOnly = true)
 	public List<FindPostDto> findByLocation(Long locationId) {
 		// location 정보 조회, ID 반환 location
-		List<Post> posts = postMapper.findByLocation(locationId);
-		return toDtoList(posts);
+		return toDtoList(postMapper.findByLocation(locationId));
 	}
 
 	@Transactional(readOnly = true)
 	public List<FindPostDto> findByUser(Long userId) {
-		List<Post> posts = postMapper.findByUser(userId);
-		return toDtoList(posts);
+		return toDtoList(postMapper.findByUser(userId));
 	}
 
 
 	// Post Delete
 	public void deletePostInfo(Long postId) {
-		int hasDeleted = postMapper.deletePost(postId);
-		if (hasDeleted < 1) {
+		int result = postMapper.deletePost(postId);
+		if (isNotReflected(result)) {
 			log.info("post delete failed : post id = {} : The error may have occurred because there is no post ID. ", postId);
 
 			throw new NoSuchPostException(" post delete failed : post id = " + postId);
@@ -91,7 +86,6 @@ public class PostService {
 	}
 
 	// Post Modify
-	@Transactional
 	public Post changePostInfo(Long postId, ModifyPostDto changePostDto) {
 		Long getLocationId = locationMapper.findLocationId(changePostDto.getLocation());
 
@@ -108,23 +102,24 @@ public class PostService {
 
 		Post changePostInfo = changePostDto.toEntity(hasFind, getLocationId, imageId);
 
-		int hasChanged = postMapper.changePost(changePostInfo);
-		if (hasChanged < 1) {
+		int result = postMapper.changePost(changePostInfo);
+		if (isNotReflected(result)) {
 			log.info("post changed failed : post id = {} : The error may be caused by a internal server error ", postId);
 
-			throw new ModifyPostFailedException(
-				" post changed failed : post id = " + hasFind +" : user id = " + changePostDto.getUserId());
+			throw new ChangePostFailedException(
+				" post changed failed : post id = " + hasFind + " : user id = " + changePostDto.getUserId());
 		}
 		return changePostInfo;
 	}
 
 
 	private List<FindPostDto> toDtoList(List<Post> posts) {
-		List<FindPostDto> postDtoList = new ArrayList<>();
-		for (Post post : posts) {
-			FindPostDto postDto = FindPostDto.of(post);
-			postDtoList.add(postDto);
-		}
-		return postDtoList;
+		return posts.stream()
+			.map(FindPostDto::of)
+			.collect(Collectors.toList());
+	}
+
+	private boolean isNotReflected(int result) {
+		return result < 1;
 	}
 }
