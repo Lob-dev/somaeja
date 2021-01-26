@@ -53,7 +53,7 @@ class UserMapperTest {
 	}
 
 	@Test
-	void userMapperTest_isDuplicateUserInfo(){
+	void userMapperTest_isDuplicateUserInfo() {
 
 		boolean result = userMapper.isDuplicateUserInfo("lob@kakao.com");
 
@@ -61,6 +61,21 @@ class UserMapperTest {
 
 		assertTrue(result);
 		assertNotEquals(true, result2);
+	}
+
+	@Test
+	void userMapperTest_userDeleteByUser() {
+
+		Long userId = 2L;
+		User user = userMapper.findById(userId);
+
+		int res = userMapper.transferUserInfo(user);
+		res = userMapper.deleteByUser(userId);
+
+		User result = userMapper.findByRestoreInfo("test@kakao.com");
+
+		System.out.println(user);
+		System.out.println(result);
 	}
 
 }
