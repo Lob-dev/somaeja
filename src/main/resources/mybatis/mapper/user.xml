@@ -69,4 +69,80 @@
         WHERE EMAIL = #{email}
     </select>
 
+
+    <insert id="transferUserInfo" parameterType="com.somaeja.user.entity.User" >
+        INSERT INTO USER_HISTORY
+        (
+            USER_ID,
+            LOCATION_ID,
+            NICKNAME,
+            PASSWORD,
+            EMAIL,
+            PHONE_NUMBER,
+            USER_ROLE,
+            CREATEDATE,
+            MODIFYDATE,
+            DELETEDATE
+        )
+        VALUES
+        (
+            #{id},
+            #{locationId},
+            #{nickName},
+            #{password},
+            #{email},
+            #{phoneNumber},
+            #{role},
+            #{createdDate},
+            #{modifyDate},
+            NOW()
+        )
+    </insert>
+
+    <insert id="restoreUserInfo" parameterType="com.somaeja.user.entity.User" >
+        INSERT INTO USER
+        (
+            USER_ID,
+            LOCATION_ID,
+            NICKNAME,
+            PASSWORD,
+            EMAIL,
+            PHONE_NUMBER,
+            USER_ROLE,
+            CREATEDATE,
+            MODIFYDATE
+        )
+        VALUES
+        (
+            #{id},
+            #{locationId},
+            #{nickName},
+            #{password},
+            #{email},
+            #{phoneNumber},
+            #{role},
+            #{createdDate},
+            #{modifyDate}
+        )
+    </insert>
+
+    <delete id="deleteByUser" parameterType="long" >
+        DELETE
+        FROM USER
+        WHERE USER_ID = #{userId}
+    </delete>
+
+    <delete id="deleteRestoreInfo" parameterType="long" >
+        DELETE
+        FROM USER_HISTORY
+        WHERE USER_ID = #{userId}
+    </delete>
+
+    <select id="findByRestoreInfo" parameterType="string" resultType="com.somaeja.user.entity.User">
+        SELECT USER_HISTORY.*, LOCATION.CITY_COUNTRY_TOWN as location
+        FROM USER_HISTORY INNER JOIN LOCATION
+        ON USER_HISTORY.LOCATION_ID = LOCATION.LOCATION_ID
+        WHERE EMAIL = #{email}
+    </select>
+
 </mapper>
