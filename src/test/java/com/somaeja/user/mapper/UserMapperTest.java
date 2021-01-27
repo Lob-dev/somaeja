@@ -16,6 +16,9 @@ class UserMapperTest {
 	@Autowired
 	UserMapper userMapper;
 
+	@Autowired
+	UserHistoryMapper userHistoryMapper;
+
 	@Test
 	void userMapperTest_findById() {
 		// Given
@@ -69,13 +72,12 @@ class UserMapperTest {
 		Long userId = 2L;
 		User user = userMapper.findById(userId);
 
-		int res = userMapper.transferUserInfo(user);
-		res = userMapper.deleteByUser(userId);
+		int res = userHistoryMapper.transferUserInfo(user);
+		res = userHistoryMapper.deleteByUser(userId);
 
-		User result = userMapper.findByRestoreInfo("test@kakao.com");
+		User result = userHistoryMapper.findByRestoreInfo("test@kakao.com");
 
 		System.out.println(user);
 		System.out.println(result);
 	}
-
 }

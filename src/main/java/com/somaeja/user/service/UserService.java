@@ -10,6 +10,8 @@ import com.somaeja.user.exception.ModifyUserFailedException;
 import com.somaeja.user.exception.SaveUserFailedException;
 import com.somaeja.user.exception.UserInfoDuplicatedException;
 import com.somaeja.user.exception.UserInfoNotFoundException;
+import com.somaeja.user.exception.SaveUserRestoreInfoFailedException;
+import com.somaeja.user.mapper.UserHistoryMapper;
 import com.somaeja.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -28,6 +29,7 @@ public class UserService {
 
 	private final LocationMapper locationMapper;
 	private final UserMapper userMapper;
+	private final UserHistoryMapper userHistoryMapper;
 
 	// User Create
 	@Transactional
@@ -85,13 +87,13 @@ public class UserService {
 			throw new UserInfoNotFoundException("user information find failed : user id = " + userId);
 		}
 
-		if (isNotReflected(userMapper.transferUserInfo(user))) {
+		if (isNotReflected(userHistoryMapper.transferUserInfo(user))) {
 			log.info("user information transfer failed : user id = {}", userId);
 
-			throw new SaveUserFailedException("user information transfer failed : user id = " + userId);
+			throw new SaveUserRestoreInfoFailedException("user information transfer failed : user id = " + userId);
 		}
 
-		if (isNotReflected(userMapper.deleteByUser(userId))) {
+		if (isNotReflected(userHistoryMapper.deleteByUser(userId))) {
 			log.info("user delete failed : user id = {}", userId);
 
 			throw new DeleteUserFailedException("user delete failed : user id = " + userId);
@@ -102,20 +104,20 @@ public class UserService {
 	@Transactional
 	public void restoreOfUser(String email) {
 
-		User user = userMapper.findByRestoreInfo(email);
+		User user = userHistoryMapper.findByRestoreInfo(email);
 		if (ObjectUtils.isEmpty(user)) {
 			log.info("user restore find failed");
 
 			throw new UserInfoNotFoundException("user restore information failed");
 		}
 
-		if (isNotReflected(userMapper.restoreUserInfo(user))) {
+		if (isNotReflected(userHistoryMapper.restoreUserInfo(user))) {
 			log.info("restore info find failed");
 
 			throw new SaveUserFailedException("user restore info find failed : user id = " + user.getId());
 		}
 
-		if (isNotReflected(userMapper.deleteRestoreInfo(user.getId()))) {
+		if (isNotReflected(userHistoryMapper.deleteRestoreInfo(user.getId()))) {
 			log.info("restore info delete failed");
 
 			throw new DeleteUserFailedException("user history info delete failed");

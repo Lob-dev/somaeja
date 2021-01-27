@@ -25,15 +25,4 @@ public interface UserMapper {
 
 	boolean isDuplicateUserInfo(String email);
 
-	// User Soft Delete , Restore
-	int transferUserInfo(User user);
-
-	int restoreUserInfo(User user);
-
-	User findByRestoreInfo(String email);
-
-	int deleteRestoreInfo(Long userId);
-
-	int deleteByUser(Long userId);
-
 }
