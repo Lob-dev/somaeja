@@ -25,6 +25,13 @@ public class UserExceptionHandler {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 	}
 
+	// User restore info save
+	@ExceptionHandler(SaveUserRestoreInfoFailedException.class)
+	protected ResponseEntity<ErrorResponse> handleSaveUserRestoreInfoFailedException(SaveUserRestoreInfoFailedException exception) {
+		final ErrorResponse response = ErrorResponse.from(exception.getMessage());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+	}
+
 	// User modify
 	@ExceptionHandler(ModifyUserFailedException.class)
 	protected ResponseEntity<ErrorResponse> handleModifyUserFailedException(ModifyUserFailedException exception) {
@@ -32,4 +39,16 @@ public class UserExceptionHandler {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
 	}
 
+	// User Delete
+	@ExceptionHandler(DeleteUserFailedException.class)
+	protected ResponseEntity<ErrorResponse> handleDeleteUserFailedException(DeleteUserFailedException exception) {
+		final ErrorResponse response = ErrorResponse.from(exception.getMessage());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+	}
+
+	@ExceptionHandler(UserInfoNotFoundException.class)
+	protected ResponseEntity<ErrorResponse> handleUserInfoNotFoundException(UserInfoNotFoundException exception) {
+		final ErrorResponse response = ErrorResponse.from(exception.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	}
 }

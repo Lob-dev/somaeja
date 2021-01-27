@@ -16,6 +16,9 @@ class UserMapperTest {
 	@Autowired
 	UserMapper userMapper;
 
+	@Autowired
+	UserHistoryMapper userHistoryMapper;
+
 	@Test
 	void userMapperTest_findById() {
 		// Given
@@ -53,7 +56,7 @@ class UserMapperTest {
 	}
 
 	@Test
-	void userMapperTest_isDuplicateUserInfo(){
+	void userMapperTest_isDuplicateUserInfo() {
 
 		boolean result = userMapper.isDuplicateUserInfo("lob@kakao.com");
 
@@ -63,4 +66,18 @@ class UserMapperTest {
 		assertNotEquals(true, result2);
 	}
 
+	@Test
+	void userMapperTest_userDeleteByUser() {
+
+		Long userId = 2L;
+		User user = userMapper.findById(userId);
+
+		int res = userHistoryMapper.transferUserInfo(user);
+		res = userHistoryMapper.deleteByUser(userId);
+
+		User result = userHistoryMapper.findByRestoreInfo("test@kakao.com");
+
+		System.out.println(user);
+		System.out.println(result);
+	}
 }

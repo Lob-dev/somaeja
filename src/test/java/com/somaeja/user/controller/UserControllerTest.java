@@ -87,7 +87,7 @@ class UserControllerTest {
 	@Test
 	void userControllerTest_findUsersOfName() throws Exception {
 
-		mockMvc.perform(get("/users?nickname=lob"))
+		mockMvc.perform(get("/users?nickname=test"))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -117,4 +117,39 @@ class UserControllerTest {
 			.andExpect(status().isNotFound());
 	}
 
+	@Test
+	void userControllerTest_softDeleteOfUser() throws Exception {
+
+		mockMvc.perform(delete("/users/{userId}", 3L))
+			.andDo(print())
+			.andExpect(status().isNoContent());
+	}
+
+	@Test
+	void userControllerTest_softDeleteOfUser_notFounds() throws Exception {
+
+		mockMvc.perform(delete("/users/{userId}", 24124124124L))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	void userControllerTest_restoreOfUser() throws Exception {
+
+		mockMvc.perform(delete("/users/{userId}", 2L))
+			.andDo(print())
+			.andExpect(status().isNoContent());
+
+		mockMvc.perform(get("/users/restore?email=test@kakao.com"))
+			.andDo(print())
+			.andExpect(status().isNoContent());
+	}
+
+	@Test
+	void userControllerTest_restoreOfUser_notFounds() throws Exception {
+
+		mockMvc.perform(get("/users/restore?email=lob@kakao.com"))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+	}
 }

@@ -24,4 +24,5 @@ public interface UserMapper {
 	int modifyOfProfiles(ModifyProfilesDto profilesDto);
 
 	boolean isDuplicateUserInfo(String email);
+
 }
