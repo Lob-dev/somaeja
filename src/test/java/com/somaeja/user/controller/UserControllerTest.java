@@ -3,6 +3,7 @@ package com.somaeja.user.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.somaeja.user.dto.CreateUserDto;
 import com.somaeja.user.dto.ModifyProfilesDto;
+import com.somaeja.user.dto.SignInUserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,8 @@ class UserControllerTest {
 
 	ModifyProfilesDto profilesDto;
 
+	SignInUserDto signInUserDto;
+
 	@BeforeEach
 	void init() {
 		userDto = new CreateUserDto("서울시 강동구 암사1동",
@@ -50,6 +53,11 @@ class UserControllerTest {
 			"nickname",
 			"password",
 			"email");
+
+		signInUserDto = new SignInUserDto(
+			"hello@kakao.com",
+			"passwords");
+
 	}
 
 
@@ -151,5 +159,47 @@ class UserControllerTest {
 		mockMvc.perform(get("/users/restore?email=lob@kakao.com"))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	void userControllerTest_signIn() throws Exception {
+
+		mockMvc.perform(post("/users/sign-in")
+			.content(objectMapper.writeValueAsString(signInUserDto))
+			.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	void userControllerTest_signIn_notValid() throws Exception {
+
+		SignInUserDto userDto = new SignInUserDto();
+
+		mockMvc.perform(post("/users/sign-in")
+			.content(objectMapper.writeValueAsString(userDto))
+			.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	void userControllerTest_signIn_notFound() throws Exception {
+
+		SignInUserDto userDto = new SignInUserDto("123", "456");
+
+		mockMvc.perform(post("/users/sign-in")
+			.content(objectMapper.writeValueAsString(userDto))
+			.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	void userControllerTest_signOut() throws Exception {
+
+		mockMvc.perform(get("/users/sign-out"))
+			.andDo(print())
+			.andExpect(status().isOk());
 	}
 }
