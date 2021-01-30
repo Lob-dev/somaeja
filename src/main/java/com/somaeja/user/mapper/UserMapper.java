@@ -1,7 +1,7 @@
 package com.somaeja.user.mapper;
 
 import com.somaeja.user.dto.ModifyProfilesDto;
-import com.somaeja.user.dto.Userinfo;
+import com.somaeja.user.dto.UserInfo;
 import com.somaeja.user.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -27,6 +27,6 @@ public interface UserMapper {
 
 	boolean isDuplicateUserInfo(String email);
 
-	Userinfo findByEmailAndPassword(@Param("email") String email,@Param("password") String password);
+	UserInfo findByEmailAndPassword(@Param("email") String email, @Param("password") String password);
 
 }

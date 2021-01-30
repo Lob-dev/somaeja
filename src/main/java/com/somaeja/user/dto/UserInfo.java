@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class Userinfo {
+public class UserInfo {
 
 	private final Long id;
 	private final RoleStatus role;

@@ -1,7 +1,7 @@
 package com.somaeja.user.service;
 
 import com.somaeja.user.dto.SignInUserDto;
-import com.somaeja.user.dto.Userinfo;
+import com.somaeja.user.dto.UserInfo;
 import com.somaeja.user.exception.UserInfoNotFoundException;
 import com.somaeja.user.mapper.UserMapper;
 import com.somaeja.user.utils.SHA256Utils;
@@ -21,7 +21,7 @@ public class UserAccountService {
 
 	public void signIn(SignInUserDto userDto, HttpSession session) {
 
-		Userinfo user = userMapper.findByEmailAndPassword(userDto.getEmail(), SHA256Utils.encode(userDto.getEmail()));
+		UserInfo user = userMapper.findByEmailAndPassword(userDto.getEmail(), SHA256Utils.encode(userDto.getEmail()));
 		if (ObjectUtils.isEmpty(user)) {
 			log.info("user information find failed");
 
@@ -35,7 +35,7 @@ public class UserAccountService {
 		session.invalidate();
 	}
 
-	private void setupSession(HttpSession session, Userinfo user) {
+	private void setupSession(HttpSession session, UserInfo user) {
 		session.setAttribute("ID", user.getId());
 		session.setAttribute("ROLE", user.getRole());
 	}

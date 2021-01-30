@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Email;
 
 @Getter
 @ToString
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class SignInUserDto {
 
-	@NotEmpty
+	@Email
 	private String email;
 
 	@NotEmpty
