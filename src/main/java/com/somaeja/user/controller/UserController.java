@@ -3,6 +3,8 @@ package com.somaeja.user.controller;
 import com.somaeja.user.dto.CreateUserDto;
 import com.somaeja.user.dto.FindUserDto;
 import com.somaeja.user.dto.ModifyProfilesDto;
+import com.somaeja.user.dto.SignInUserDto;
+import com.somaeja.user.service.UserAccountService;
 import com.somaeja.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -27,6 +30,7 @@ import java.util.List;
 public class UserController {
 
 	private final UserService userService;
+	private final UserAccountService userAccountService;
 
 	// User 생성
 	@PostMapping("/users/register")
@@ -36,6 +40,18 @@ public class UserController {
 	}
 
 	// User sign-in, sign-out 세션 값 설정 = id, role?
+
+	@PostMapping("/users/sign-in")
+	public ResponseEntity<String> signIn(@Valid @RequestBody SignInUserDto userDto, HttpSession session) {
+		userAccountService.signIn(userDto, session);
+		return ResponseEntity.status(HttpStatus.OK).body("sign-in Success");
+	}
+
+	@GetMapping("/users/sign-out")
+	public ResponseEntity<String> signOut(HttpSession session) {
+		userAccountService.signOut(session);
+		return ResponseEntity.status(HttpStatus.OK).body("sign-out Success");
+	}
 
 	// User Find
 	// Login 시 사용

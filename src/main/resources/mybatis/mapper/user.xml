@@ -69,4 +69,10 @@
         WHERE EMAIL = #{email}
     </select>
 
+    <select id="findByEmailAndPassword" resultType="com.somaeja.user.dto.UserInfo" parameterType="map">
+        SELECT USER_ID as id, USER_ROLE as role
+        FROM USER
+        WHERE EMAIL = #{email} AND PASSWORD = #{password}
+    </select>
+
 </mapper>
