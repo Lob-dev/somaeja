@@ -59,6 +59,7 @@ class PostControllerTest {
 	void createPost() throws Exception {
 		// Then
 		ResultActions resultActions = mockMvc.perform(post("/posts")
+			.sessionAttr("ID", 1L)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(postDto)))
 			.andDo(print())
@@ -71,13 +72,25 @@ class PostControllerTest {
 	}
 
 	@Test
+	@DisplayName("create post test - 실패, ID 값이 없을 경우")
+	void createPost_BadRequest_EmptyUserId() throws Exception {
+		// Then
+		mockMvc.perform(post("/posts")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(objectMapper.writeValueAsString(postDto)))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
 	@DisplayName("create post test - 실패, input 값이 없을 경우")
-	void createPost_BadRequest() throws Exception {
+	void createPost_BadRequest_EmptyInputValue() throws Exception {
 		// Given
 		badPostDto = CreatePostDto.builder().build();
 
 		// Then
 		mockMvc.perform(post("/posts")
+			.sessionAttr("ID", 1L)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(badPostDto)))
 			.andDo(print())
@@ -207,16 +220,28 @@ class PostControllerTest {
 	@DisplayName("Delete post by postId")
 	void deletePostByPostId() throws Exception {
 		// Then
-		mockMvc.perform(delete("/posts/{postId}" , 1L))
+		mockMvc.perform(delete("/posts/{postId}" , 1L)
+			.sessionAttr("ID", 1L))
 			.andDo(print())
 			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("Delete post by postId - 실패, 다른 유저의 ID 값이 들어갔을 경우")
+	void deletePostByPostId_BadRequest_WrongUserId() throws Exception {
+		// Then
+		mockMvc.perform(delete("/posts/{postId}" , 1L)
+			.sessionAttr("ID", 2L))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
 	@DisplayName("Delete post by postId - 실패, 잘못된 타입의 값이 넘어왔을 경우")
 	void deletePostByPostId_BadRequest_WrongType() throws Exception {
 		// Then
-		mockMvc.perform(delete("/posts/{postId}" , "str"))
+		mockMvc.perform(delete("/posts/{postId}" , "str")
+			.sessionAttr("ID", 1L))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
@@ -225,7 +250,8 @@ class PostControllerTest {
 	@DisplayName("Delete post by postId - 해당하는 컨텐츠가 없는 경우")
 	void deletePostByPostId_NoContent() throws Exception {
 		// Then
-		mockMvc.perform(delete("/posts/{postId}" , 1213124415))
+		mockMvc.perform(delete("/posts/{postId}" , 1213124415)
+			.sessionAttr("ID", 3L))
 			.andDo(print())
 			.andExpect(status().isNoContent());
 	}
@@ -236,10 +262,36 @@ class PostControllerTest {
 
 		// Then
 		mockMvc.perform(put("/posts/{postId}" , 1L)
+			.sessionAttr("ID", 1L)
 			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
 			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("Change post by postId - 실패, 다른 유저의 ID 값이 넘어왔을 경우")
+	void modifyPostByPostId_BadRequest_WrongUserId() throws Exception {
+
+		// Then
+		mockMvc.perform(put("/posts/{postId}" , 2L)
+			.sessionAttr("ID", 3L)
+			.content(objectMapper.writeValueAsString(modifyDto))
+			.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@DisplayName("Change post by postId - 실패, 세션 정보가 없거나, 비어있는 경우")
+	void modifyPostByPostId_BadRequest_EmptySessionInfo() throws Exception {
+
+		// Then
+		mockMvc.perform(put("/posts/{postId}" , 1L)
+			.content(objectMapper.writeValueAsString(modifyDto))
+			.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -248,6 +300,7 @@ class PostControllerTest {
 
 		// Then
 		mockMvc.perform(put("/posts/{postId}" , "str")
+			.sessionAttr("ID", 1L)
 			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
@@ -260,6 +313,7 @@ class PostControllerTest {
 
 		// Then
 		mockMvc.perform(put("/posts/{postId}", 1123241L)
+			.sessionAttr("ID", 1L)
 			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())

@@ -85,6 +85,7 @@ class UserControllerTest {
 	void userControllerTest_modifyEmail() throws Exception {
 
 		mockMvc.perform(patch("/users/profile")
+			.sessionAttr("ID", 1L)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(profilesDto)))
 			.andDo(print())
@@ -111,24 +112,17 @@ class UserControllerTest {
 	@Test
 	void userControllerTest_getUserProfile() throws Exception {
 
-		mockMvc.perform(get("/users/profile"))
+		mockMvc.perform(get("/users/profile")
+			.sessionAttr("ID", 1L))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
 
 	@Test
-	@Disabled
-	void userControllerTest_getUserProfile_notFounds() throws Exception {
-
-		mockMvc.perform(get("/users/profile"))
-			.andDo(print())
-			.andExpect(status().isNotFound());
-	}
-
-	@Test
 	void userControllerTest_softDeleteOfUser() throws Exception {
 
-		mockMvc.perform(delete("/users/{userId}", 3L))
+		mockMvc.perform(delete("/users/{userId}", 3L)
+			.sessionAttr("ID", 3L))
 			.andDo(print())
 			.andExpect(status().isNoContent());
 	}
@@ -136,7 +130,8 @@ class UserControllerTest {
 	@Test
 	void userControllerTest_softDeleteOfUser_notFounds() throws Exception {
 
-		mockMvc.perform(delete("/users/{userId}", 24124124124L))
+		mockMvc.perform(delete("/users/{userId}", 24124124124L)
+			.sessionAttr("ID", 1L))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
@@ -144,11 +139,12 @@ class UserControllerTest {
 	@Test
 	void userControllerTest_restoreOfUser() throws Exception {
 
-		mockMvc.perform(delete("/users/{userId}", 2L))
+		mockMvc.perform(delete("/users/{userId}", 4L)
+			.sessionAttr("ID", 4L))
 			.andDo(print())
 			.andExpect(status().isNoContent());
 
-		mockMvc.perform(get("/users/restore?email=test@kakao.com"))
+		mockMvc.perform(get("/users/restore?email=hellos@kakao.com"))
 			.andDo(print())
 			.andExpect(status().isNoContent());
 	}
