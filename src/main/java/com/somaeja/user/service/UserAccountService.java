@@ -38,6 +38,7 @@ public class UserAccountService {
 	private void setupSession(HttpSession session, UserInfo user) {
 		session.setAttribute("ID", user.getId());
 		session.setAttribute("ROLE", user.getRole());
+		session.setMaxInactiveInterval(5 * 60);
 	}
 
 }
