@@ -58,7 +58,7 @@ class UserMapperTest {
 	@Test
 	void userMapperTest_isDuplicateUserInfo() {
 
-		boolean result = userMapper.isDuplicateUserInfo("lob@kakao.com");
+		boolean result = userMapper.isDuplicateUserInfo("hello@kakao.com");
 
 		boolean result2 = userMapper.isDuplicateUserInfo("sdasfsafasf");
 

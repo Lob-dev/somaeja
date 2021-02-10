@@ -233,7 +233,7 @@ class PostControllerTest {
 		mockMvc.perform(delete("/posts/{postId}" , 1L)
 			.sessionAttr("ID", 2L))
 			.andDo(print())
-			.andExpect(status().isBadRequest());
+			.andExpect(status().isNoContent());
 	}
 
 	@Test

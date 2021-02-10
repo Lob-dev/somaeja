@@ -77,20 +77,7 @@ public class PostService {
 	// Post Delete
 	public void deletePostInfo(Long postId, Long userId) {
 
-		Post targetPost = postMapper.findPostById(postId);
-		if (ObjectUtils.isEmpty(targetPost)) {
-			log.info("post Not found : post id = {}", postId);
-
-			throw new NoSuchPostException(" post Not found : post id = " + postId);
-		}
-
-		if (!targetPost.getUserId().equals(userId)) {
-			log.info("user information match failed : not matched user id : id = {} but input id = {}",targetPost.getUserId(), userId);
-
-			throw new UserInfoNotMatchedException(" user information match failed : not matched user id : id = "+targetPost.getUserId()+" but input id = " + userId);
-		}
-
-		int result = postMapper.deletePost(postId);
+		int result = postMapper.deletePost(postId, userId);
 		if (isNotReflected(result)) {
 			log.info("post delete failed : post id = {} : The error may have occurred because there is no post ID. ", postId);
 

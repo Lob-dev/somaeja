@@ -1,6 +1,7 @@
 package com.somaeja.post.mapper;
 
 import com.somaeja.post.entity.Post;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public interface PostMapper {
 
 	List<Post> findByUser(Long userId);
 
-	int deletePost(Long postId);
+	int deletePost(@Param("postId") Long postId, @Param("userId") Long userId);
 
 	int changePost(Post modifyPost);
 }

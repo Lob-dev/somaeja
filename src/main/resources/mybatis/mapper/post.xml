@@ -72,8 +72,10 @@
         WHERE USER_ID = #{userId}
     </select>
 
-    <delete id="deletePost" parameterType="long">
-        DELETE FROM POST WHERE POST_ID = #{postId}
+    <delete id="deletePost" parameterType="map">
+        DELETE
+        FROM POST
+        WHERE POST_ID = #{postId} AND USER_ID = #{userId}
     </delete>
 
     <update id="changePost" parameterType="com.somaeja.post.entity.Post">
