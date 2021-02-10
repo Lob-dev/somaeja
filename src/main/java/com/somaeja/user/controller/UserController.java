@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -56,9 +58,8 @@ public class UserController {
 	// User Find
 	// Login 시 사용
 	@GetMapping("/users/profile")
-	public ResponseEntity<FindUserDto> getUserProfile() {
-		// 세션의 user Id 정보 사용 session.getAttribute("id");
-		FindUserDto user = userService.findById(1L);
+	public ResponseEntity<FindUserDto> getUserProfile(@SessionAttribute("ID") Long userId) {
+		FindUserDto user = userService.findById(userId);
 		return ResponseEntity.status(HttpStatus.OK).body(user);
 	}
 
@@ -74,9 +75,13 @@ public class UserController {
 
 	// User Delete
 	@DeleteMapping("/users/{userId}")
-	public ResponseEntity<String> softDeleteOfUser(@PathVariable Long userId) {
-		userService.deleteByUser(userId);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("delete completed");
+	public ResponseEntity<String> softDeleteOfUser(@PathVariable Long userId, @SessionAttribute("ID") Long requestUserId) {
+
+		if (userId.equals(requestUserId)) {
+			userService.deleteByUser(userId);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("delete completed");
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("user information does not match");
 	}
 
 	@GetMapping("/users/restore")
@@ -89,8 +94,8 @@ public class UserController {
 	// 세션 기반 로그인 기능 생성 후에는 세션에 담긴 ID 값을 사용하도록 변경
 
 	@PatchMapping("/users/profile")
-	public ResponseEntity<String> modifyProfiles(@RequestBody ModifyProfilesDto dto) {
-		userService.modifyOfProfiles(new ModifyProfilesDto(1L, dto.getNickname(), dto.getPassword(), dto.getEmail()));
+	public ResponseEntity<String> modifyProfiles(@RequestBody ModifyProfilesDto dto, @SessionAttribute("ID") Long userId) {
+		userService.modifyOfProfiles(new ModifyProfilesDto(userId, dto.getNickname(), dto.getPassword(), dto.getEmail()));
 		return ResponseEntity.status(HttpStatus.OK).body("modify completed");
 	}
 

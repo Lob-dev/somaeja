@@ -9,6 +9,7 @@ import com.somaeja.post.exception.ChangePostFailedException;
 import com.somaeja.post.exception.NoSuchPostException;
 import com.somaeja.post.exception.SavePostFailedException;
 import com.somaeja.post.mapper.PostMapper;
+import com.somaeja.post.exception.UserInfoNotMatchedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,7 @@ public class PostService {
 	private final LocationMapper locationMapper;
 
 	// Post Create
-	public Post savePostInfo(CreatePostDto createDto) {
-		// user 아이디 조회, User Id는 Login 정보로 반환...? 인터셉터(인증)?
-		long userId = 1;
+	public Post savePostInfo(CreatePostDto createDto, Long userId) {
 
 		Long getLocationId = locationMapper.findLocationId(createDto.getLocation());
 		// image 정보 조회, Image 테이블에 저장 -> ID 생성 -> ID 반환
@@ -76,7 +75,21 @@ public class PostService {
 
 
 	// Post Delete
-	public void deletePostInfo(Long postId) {
+	public void deletePostInfo(Long postId, Long userId) {
+
+		Post targetPost = postMapper.findPostById(postId);
+		if (ObjectUtils.isEmpty(targetPost)) {
+			log.info("post Not found : post id = {}", postId);
+
+			throw new NoSuchPostException(" post Not found : post id = " + postId);
+		}
+
+		if (!targetPost.getUserId().equals(userId)) {
+			log.info("user information match failed : not matched user id : id = {} but input id = {}",targetPost.getUserId(), userId);
+
+			throw new UserInfoNotMatchedException(" user information match failed : not matched user id : id = "+targetPost.getUserId()+" but input id = " + userId);
+		}
+
 		int result = postMapper.deletePost(postId);
 		if (isNotReflected(result)) {
 			log.info("post delete failed : post id = {} : The error may have occurred because there is no post ID. ", postId);
@@ -86,28 +99,35 @@ public class PostService {
 	}
 
 	// Post Modify
-	public Post changePostInfo(Long postId, ModifyPostDto changePostDto) {
+	public Post changePostInfo(Long postId, Long userId, ModifyPostDto changePostDto) {
 		Long getLocationId = locationMapper.findLocationId(changePostDto.getLocation());
 
 		String imageName = changePostDto.getImageName();
-		// Long imageId = imageMapper.findImage(imageName);
+
 		Long imageId = 1L;
 
-		Long hasFind = postMapper.findPostById(postId);
-		if (ObjectUtils.isEmpty(hasFind)) {
+		Post targetPost = postMapper.findPostById(postId);
+		if (ObjectUtils.isEmpty(targetPost)) {
 			log.info("post find failed : post id = {} : The error may have occurred because there is no post ID. ", postId);
 
 			throw new NoSuchPostException(" post find failed : post id = " + postId);
 		}
 
-		Post changePostInfo = changePostDto.toEntity(hasFind, getLocationId, imageId);
+		if (!targetPost.getUserId().equals(userId)) {
+			log.info("user information match failed : not matched user id : id = {} but input id = {}",targetPost.getUserId(), userId);
+
+			throw new UserInfoNotMatchedException(" user information match failed : not matched user id : id = "+targetPost.getUserId()+" but input id = " + userId);
+		}
+
+
+		Post changePostInfo = changePostDto.toEntity(targetPost.getId(), getLocationId, imageId);
 
 		int result = postMapper.changePost(changePostInfo);
 		if (isNotReflected(result)) {
 			log.info("post changed failed : post id = {} : The error may be caused by a internal server error ", postId);
 
 			throw new ChangePostFailedException(
-				" post changed failed : post id = " + hasFind + " : user id = " + changePostDto.getUserId());
+				" post changed failed : post id = " + targetPost.getId() + " : user id = " + changePostDto.getUserId());
 		}
 		return changePostInfo;
 	}

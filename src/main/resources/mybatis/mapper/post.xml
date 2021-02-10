@@ -31,9 +31,10 @@
         )
     </insert>
 
-    <select id="findPostById" resultType="long" parameterType="long">
-        SELECT POST_ID
-        FROM POST
+    <select id="findPostById" resultType="com.somaeja.post.entity.Post" parameterType="long">
+        SELECT POST.*, LOCATION.CITY_COUNTRY_TOWN as location
+        FROM POST INNER JOIN LOCATION
+        ON POST.LOCATION_ID = LOCATION.LOCATION_ID
         WHERE POST_ID = #{postId}
     </select>
 

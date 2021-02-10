@@ -23,16 +23,16 @@ public class PostController {
 	private final PostService postService;
 
 	@PostMapping("/posts")
-	public ResponseEntity<PostInfo> createPostInfo(@Valid @RequestBody CreatePostDto postDto) {
+	public ResponseEntity<PostInfo> createPostInfo(@Valid @RequestBody CreatePostDto postDto,
+												   @SessionAttribute("ID") Long userId) {
 		// Image files -> Stream -> resources / static / (여기에 저장)
-		Post post = postService.savePostInfo(postDto);
+		Post post = postService.savePostInfo(postDto, userId);
 		return ResponseEntity.status(HttpStatus.CREATED).body(PostInfo.from(post.getId(), "post created!"));
 	}
 
 	@GetMapping(value = "/posts")
-	public ResponseEntity<List<FindPostDto>> findPostAll(
-		@RequestParam(value = "title", required = false) String titleOfQuery,
-		@RequestParam(value = "content", required = false) String contentOfQuery) {
+	public ResponseEntity<List<FindPostDto>> findPostAll(@RequestParam(value = "title", required = false) String titleOfQuery,
+														 @RequestParam(value = "content", required = false) String contentOfQuery) {
 
 		if (titleOfQuery == null && contentOfQuery == null) {
 			List<FindPostDto> posts = postService.findByAll();
@@ -41,14 +41,14 @@ public class PostController {
 			}
 
 			return ResponseEntity.status(HttpStatus.OK).body(posts);
-		} else if (contentOfQuery != null){
+		} else if (contentOfQuery != null) {
 			List<FindPostDto> posts = postService.findByContent(contentOfQuery);
 			if (CollectionUtils.isEmpty(posts)) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(posts);
 			}
 
 			return ResponseEntity.status(HttpStatus.OK).body(posts);
-	    } else {
+		} else {
 			List<FindPostDto> posts = postService.findByTitle(titleOfQuery);
 			if (CollectionUtils.isEmpty(posts)) {
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).body(posts);
@@ -77,14 +77,15 @@ public class PostController {
 	}
 
 	@DeleteMapping("/posts/{postId}")
-	public ResponseEntity<PostInfo> deletePostInfo(@PathVariable Long postId) {
-		postService.deletePostInfo(postId);
+	public ResponseEntity<PostInfo> deletePostInfo(@PathVariable Long postId, @SessionAttribute("ID") Long userId) {
+		postService.deletePostInfo(postId, userId);
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(postId, "post deleted!"));
 	}
 
 	@PutMapping("/posts/{postId}")
-	public ResponseEntity<PostInfo> changePostInfo(@PathVariable Long postId, @Valid @RequestBody ModifyPostDto modifyPostDto){
-		Post post = postService.changePostInfo(postId, modifyPostDto);
+	public ResponseEntity<PostInfo> changePostInfo(@PathVariable Long postId, @Valid @RequestBody ModifyPostDto modifyPostDto,
+												   @SessionAttribute("ID") Long userId) {
+		Post post = postService.changePostInfo(postId, userId, modifyPostDto);
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(post.getId(), "post updated!"));
 	}
 
