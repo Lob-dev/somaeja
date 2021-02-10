@@ -1,10 +1,12 @@
 package com.somaeja.user.exception;
 
 import com.somaeja.global.exception.ErrorResponse;
+import com.somaeja.post.exception.UserInfoNotMatchedException;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -59,4 +61,17 @@ public class UserExceptionHandler {
 		final ErrorResponse response = ErrorResponse.from(exception.getMessage());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 	}
+
+	@ExceptionHandler(ServletRequestBindingException.class)
+	protected ResponseEntity<ErrorResponse> handleServletRequestBindingException(ServletRequestBindingException exception) {
+		final ErrorResponse response = ErrorResponse.from(exception.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	}
+
+	@ExceptionHandler(UserInfoNotMatchedException.class)
+	protected ResponseEntity<ErrorResponse> handleUserInfoNotMatchedException(UserInfoNotMatchedException exception) {
+		final ErrorResponse response = ErrorResponse.from(exception.getMessage());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+	}
+
 }
