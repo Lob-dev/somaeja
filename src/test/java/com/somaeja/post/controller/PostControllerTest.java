@@ -79,7 +79,7 @@ class PostControllerTest {
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(postDto)))
 			.andDo(print())
-			.andExpect(status().isBadRequest());
+			.andExpect(status().isUnauthorized());
 	}
 
 	@Test
@@ -291,7 +291,7 @@ class PostControllerTest {
 			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
-			.andExpect(status().isBadRequest());
+			.andExpect(status().isUnauthorized());
 	}
 
 	@Test

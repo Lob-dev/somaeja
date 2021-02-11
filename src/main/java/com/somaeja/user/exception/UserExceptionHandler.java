@@ -65,7 +65,7 @@ public class UserExceptionHandler {
 	@ExceptionHandler(ServletRequestBindingException.class)
 	protected ResponseEntity<ErrorResponse> handleServletRequestBindingException(ServletRequestBindingException exception) {
 		final ErrorResponse response = ErrorResponse.from(exception.getMessage());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
 	}
 
 	@ExceptionHandler(UserInfoNotMatchedException.class)
