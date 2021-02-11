@@ -7,10 +7,10 @@ import com.somaeja.user.dto.SignInUserDto;
 import com.somaeja.user.service.UserAccountService;
 import com.somaeja.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(produces = "application/json; charset=UTF8")
@@ -34,14 +35,11 @@ public class UserController {
 	private final UserService userService;
 	private final UserAccountService userAccountService;
 
-	// User 생성
 	@PostMapping("/users/register")
 	public ResponseEntity<String> register(@Valid @RequestBody CreateUserDto userDto) {
 		userService.register(userDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body("registration completed");
 	}
-
-	// User sign-in, sign-out 세션 값 설정 = id, role?
 
 	@PostMapping("/users/sign-in")
 	public ResponseEntity<String> signIn(@Valid @RequestBody SignInUserDto userDto, HttpSession session) {
@@ -55,8 +53,6 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body("sign-out Success");
 	}
 
-	// User Find
-	// Login 시 사용
 	@GetMapping("/users/profile")
 	public ResponseEntity<FindUserDto> getUserProfile(@SessionAttribute("ID") Long userId) {
 		FindUserDto user = userService.findById(userId);
@@ -73,7 +69,6 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(users);
 	}
 
-	// User Delete
 	@DeleteMapping("/users/{userId}")
 	public ResponseEntity<String> softDeleteOfUser(@PathVariable Long userId, @SessionAttribute("ID") Long requestUserId) {
 
@@ -81,6 +76,7 @@ public class UserController {
 			userService.deleteByUser(userId);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("delete completed");
 		}
+		log.info("user information does not match : requested ID is {}, but {} came in.", userId, requestUserId);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("user information does not match");
 	}
 
@@ -89,9 +85,6 @@ public class UserController {
 		userService.restoreOfUser(emailOfQuery);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body("restore completed");
 	}
-
-	// User Modify
-	// 세션 기반 로그인 기능 생성 후에는 세션에 담긴 ID 값을 사용하도록 변경
 
 	@PatchMapping("/users/profile")
 	public ResponseEntity<String> modifyProfiles(@RequestBody ModifyProfilesDto dto, @SessionAttribute("ID") Long userId) {

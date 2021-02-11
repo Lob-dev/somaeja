@@ -14,7 +14,7 @@ import com.somaeja.user.exception.SaveUserRestoreInfoFailedException;
 import com.somaeja.user.mapper.UserHistoryMapper;
 import com.somaeja.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -22,7 +22,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Log4j2
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -31,7 +31,6 @@ public class UserService {
 	private final UserMapper userMapper;
 	private final UserHistoryMapper userHistoryMapper;
 
-	// User Create
 	@Transactional
 	public void register(CreateUserDto userDto) {
 
@@ -55,7 +54,6 @@ public class UserService {
 		}
 	}
 
-	// User Find
 	@Transactional(readOnly = true)
 	public FindUserDto findById(Long userId) {
 		return FindUserDto.of(userMapper.findById(userId));
@@ -76,7 +74,6 @@ public class UserService {
 		return toDtoList(userMapper.findByAll());
 	}
 
-	// User Delete
 	@Transactional
 	public void deleteByUser(Long userId) {
 
@@ -100,7 +97,6 @@ public class UserService {
 		}
 	}
 
-	// User Info Restore
 	@Transactional
 	public void restoreOfUser(String email) {
 
@@ -124,7 +120,6 @@ public class UserService {
 		}
 	}
 
-	// User Modify
 	public void modifyOfProfiles(ModifyProfilesDto profilesDto) {
 
 		if (isNotReflected(userMapper.modifyOfProfiles(profilesDto))) {

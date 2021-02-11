@@ -11,7 +11,7 @@ import com.somaeja.post.exception.SavePostFailedException;
 import com.somaeja.post.mapper.PostMapper;
 import com.somaeja.post.exception.UserInfoNotMatchedException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -19,7 +19,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Log4j2
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -27,7 +27,6 @@ public class PostService {
 	private final PostMapper postMapper;
 	private final LocationMapper locationMapper;
 
-	// Post Create
 	public Post savePostInfo(CreatePostDto createDto, Long userId) {
 
 		Long getLocationId = locationMapper.findLocationId(createDto.getLocation());
@@ -46,7 +45,6 @@ public class PostService {
 		return savePostInfo;
 	}
 
-	// Post Find
 	@Transactional(readOnly = true)
 	public List<FindPostDto> findByAll() {
 		return toDtoList(postMapper.findByAll());
@@ -74,7 +72,6 @@ public class PostService {
 	}
 
 
-	// Post Delete
 	public void deletePostInfo(Long postId, Long userId) {
 
 		int result = postMapper.deletePost(postId, userId);
@@ -85,7 +82,6 @@ public class PostService {
 		}
 	}
 
-	// Post Modify
 	public Post changePostInfo(Long postId, Long userId, ModifyPostDto changePostDto) {
 		Long getLocationId = locationMapper.findLocationId(changePostDto.getLocation());
 
