@@ -22,7 +22,7 @@ Kakao Oven을 이용하여 프로토타입 설계를 진행하였으며, API 서
 <br/>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/67903919/105021619-1342d380-5a8c-11eb-9d98-3bdaed70f283.png" width="85%">
+<img src="https://user-images.githubusercontent.com/67903919/107630206-911e8700-6ca6-11eb-9cce-5919b4559270.png" width="85%">
 </p>
 
 <br/>
