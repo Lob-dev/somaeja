@@ -32,7 +32,7 @@ public class UserService {
 	private final UserHistoryMapper userHistoryMapper;
 
 	@Transactional
-	public void register(CreateUserDto userDto) {
+	public void signUp(CreateUserDto userDto) {
 
 		Long locationId = locationMapper.findLocationId(userDto.getLocation());
 
