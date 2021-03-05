@@ -1,0 +1,136 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+
+  profiles: local
+
+jwt:
+  secret: ENC(Gz3ScAvUKzSVzuJoSt6wIeEe0HIBd/clqA1vYqnWDMas74KHU6qVA7LIa4TWrg/hsyo9HE8UgvTxyohOrYjF0igwUEwW3arJoXkLsuFwGCNb3nf6fNVLIA7TXRI3BQyF3jPYkrxnKgpmmwhW2d32vKSMkUq9J7ZtJm8vdkiSOHULw+dgcsKNwnDEL5Vra681)
+
+mybatis:
+  mapper-locations: main.resources.mybatis.mapper
+
+logging:
+  level:
+
+    root:
+      level: debug
+
+    com:
+      somaeja:
+        level: debug
+        additivity: false
+
+        global:
+          exception:
+            GlobalExceptionHandler:
+              level: error
+              additivity: false
+
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss
+
+jasypt:
+  encryptor:
+    bean: stringEncryptor
+
+---
+
+spring:
+  datasource:
+    url: ENC(I0kQxxRKUPXpzF+g+u+AgOd5INn0fNTJAbt4lws4K0U6oTU+jjh1fB7Lvxj221Endgw9KDW0AUjIVVwj5WWU3oxyIzj4iRiVNqrPeF4ocIZa1tH/P8loSvtglFzi8VLCOGlMbiQX+VI=)
+    username: ENC(aq3D0fR56+Bofw4Sym/WcA==)
+    password: ENC(xF21PuOeBVb++nnUgWmDkToV0cL48voo)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  profiles: dev
+
+jwt:
+  secret: ENC(Gz3ScAvUKzSVzuJoSt6wIeEe0HIBd/clqA1vYqnWDMas74KHU6qVA7LIa4TWrg/hsyo9HE8UgvTxyohOrYjF0igwUEwW3arJoXkLsuFwGCNb3nf6fNVLIA7TXRI3BQyF3jPYkrxnKgpmmwhW2d32vKSMkUq9J7ZtJm8vdkiSOHULw+dgcsKNwnDEL5Vra681)
+
+mybatis:
+  mapper-locations: main.resources.mybatis.mapper
+
+logging:
+  level:
+
+    root:
+      level: info
+      additivity: false
+
+    com:
+      somaeja:
+        post:
+          service:
+            PostService:
+              level: info
+              additivity: false
+
+        global:
+          exception:
+            GlobalExceptionHandler:
+              level: error
+              additivity: false
+
+  file:
+    path: /logs/somaeja
+
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss
+
+jasypt:
+  encryptor:
+    bean: stringEncryptor
+
+---
+
+spring:
+  datasource:
+    url: ENC(euISPg7aEYsXGeUcK3457UvHI8YzZ1/RrmF88C7+KpL8ds7oIsPu1lutNczuoUHSMCnb7VJAxc/YPDG7ZVrzyec30SzT11v1dPe1iqxO5XaHMY5UJJAHVxMN89UrhfbktdKyX8be35K82t9O9qedkQ==)
+    username: ENC(dtOKaonAj6LKAWME0mcR8w==)
+    password: ENC(bV8Zpx6XJtngI40F9T9HKP3NuwpbK66q)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  profiles: prod
+
+jwt:
+  secret: ENC(Gz3ScAvUKzSVzuJoSt6wIeEe0HIBd/clqA1vYqnWDMas74KHU6qVA7LIa4TWrg/hsyo9HE8UgvTxyohOrYjF0igwUEwW3arJoXkLsuFwGCNb3nf6fNVLIA7TXRI3BQyF3jPYkrxnKgpmmwhW2d32vKSMkUq9J7ZtJm8vdkiSOHULw+dgcsKNwnDEL5Vra681)
+
+mybatis:
+  mapper-locations: main.resources.mybatis.mapper
+
+logging:
+  level:
+
+    root:
+      level: info
+      additivity: false
+
+    com:
+      somaeja:
+        post:
+          service:
+            PostService:
+              level: info
+              additivity: false
+
+        global:
+          exception:
+            GlobalExceptionHandler:
+              level: error
+              additivity: false
+
+  file:
+    path: /logs/somaeja
+
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss
+
+jasypt:
+  encryptor:
+    bean: stringEncryptor

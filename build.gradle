@@ -12,16 +12,6 @@ checkstyle {
     toolVersion = '8.27'
 }
 
-ext.profile = (!project.hasProperty('profile') || !profile) ? 'dev' : profile
-
-sourceSets {
-    main {
-        resources {
-            srcDirs "src/main/resources", "src/main/resources-env/${profile}"
-        }
-    }
-}
-
 editorconfig {
     excludes = ['build']
 }
@@ -58,7 +48,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
+    compile group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '3.0.2'
     runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly 'com.h2database:h2'
     testRuntimeOnly 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'

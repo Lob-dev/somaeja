@@ -1,7 +1,7 @@
 package com.somaeja.post.controller;
 
-import com.somaeja.common.config.jwt.JwtFilter;
-import com.somaeja.common.config.jwt.JwtTokenProvider;
+import com.somaeja.config.jwt.JwtFilter;
+import com.somaeja.config.jwt.JwtTokenProvider;
 import com.somaeja.post.controller.response.PostInfo;
 import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.FindPostDto;

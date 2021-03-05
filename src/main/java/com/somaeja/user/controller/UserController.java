@@ -1,7 +1,7 @@
 package com.somaeja.user.controller;
 
-import com.somaeja.common.config.jwt.JwtFilter;
-import com.somaeja.common.config.jwt.JwtTokenProvider;
+import com.somaeja.config.jwt.JwtFilter;
+import com.somaeja.config.jwt.JwtTokenProvider;
 import com.somaeja.user.dto.CreateUserDto;
 import com.somaeja.user.dto.FindUserDto;
 import com.somaeja.user.dto.ModifyProfilesDto;

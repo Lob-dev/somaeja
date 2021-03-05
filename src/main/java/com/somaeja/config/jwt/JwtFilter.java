@@ -1,4 +1,4 @@
-package com.somaeja.common.config.jwt;
+package com.somaeja.config.jwt;
 
 import com.somaeja.user.service.UserAccountService;
 import lombok.RequiredArgsConstructor;

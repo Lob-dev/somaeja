@@ -1,7 +1,7 @@
 package com.somaeja.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somaeja.common.config.jwt.JwtFilter;
+import com.somaeja.config.jwt.JwtFilter;
 import com.somaeja.user.dto.CreateUserDto;
 import com.somaeja.user.dto.ModifyProfilesDto;
 import com.somaeja.user.dto.SignInUserDto;

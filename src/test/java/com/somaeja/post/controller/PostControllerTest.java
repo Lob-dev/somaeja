@@ -1,7 +1,7 @@
 package com.somaeja.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.somaeja.common.config.jwt.JwtFilter;
+import com.somaeja.config.jwt.JwtFilter;
 import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.ModifyPostDto;
 import org.junit.jupiter.api.BeforeEach;

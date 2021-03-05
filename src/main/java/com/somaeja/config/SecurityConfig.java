@@ -1,7 +1,7 @@
-package com.somaeja.common.config;
+package com.somaeja.config;
 
-import com.somaeja.common.config.jwt.JwtFilter;
-import com.somaeja.common.config.jwt.JwtTokenProvider;
+import com.somaeja.config.jwt.JwtFilter;
+import com.somaeja.config.jwt.JwtTokenProvider;
 import com.somaeja.user.service.UserAccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
@@ -43,7 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.GET,"/posts").permitAll()
 				.antMatchers(HttpMethod.GET,"/locations/{locationId}/posts").permitAll()
 				.antMatchers(HttpMethod.GET,"/locations").permitAll()
-				.antMatchers(HttpMethod.GET,"/users").permitAll()
 				.antMatchers(HttpMethod.GET,"/users/restore").permitAll()
 				.antMatchers(HttpMethod.POST,"/users/register").permitAll()
 				.antMatchers(HttpMethod.POST,"/users/sign-in").permitAll()

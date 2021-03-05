@@ -1,6 +1,6 @@
 package com.somaeja.user.service;
 
-import com.somaeja.common.config.jwt.JwtTokenProvider;
+import com.somaeja.config.jwt.JwtTokenProvider;
 import com.somaeja.user.dto.SignInUserDto;
 import com.somaeja.user.dto.UserInfo;
 import com.somaeja.user.exception.UserInfoNotFoundException;

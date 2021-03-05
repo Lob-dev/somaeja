@@ -1,4 +1,4 @@
-package com.somaeja.common.config;
+package com.somaeja.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
