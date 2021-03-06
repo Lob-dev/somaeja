@@ -1,6 +1,7 @@
 package com.somaeja.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.somaeja.config.jwt.JwtFilter;
 import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.ModifyPostDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
 class PostControllerTest {
 	@Autowired
@@ -59,7 +60,9 @@ class PostControllerTest {
 	void createPost() throws Exception {
 		// Then
 		ResultActions resultActions = mockMvc.perform(post("/posts")
-			.sessionAttr("ID", 1L)
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIxIiwiZXhwIjoxNjEzNzQyODUzMjczfQ." +
+				"7kf4YpTo6TorkHSMVEKYz_jKKll1e7HR4CllHvtZXFxZ2ygIvOgDE13Mj_jYhyqma-kVvd6-ELJ-TZrVWqofcQ")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(postDto)))
 			.andDo(print())
@@ -90,7 +93,9 @@ class PostControllerTest {
 
 		// Then
 		mockMvc.perform(post("/posts")
-			.sessionAttr("ID", 1L)
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIxIiwiZXhwIjoxNjEzNzQyODUzMjczfQ." +
+				"7kf4YpTo6TorkHSMVEKYz_jKKll1e7HR4CllHvtZXFxZ2ygIvOgDE13Mj_jYhyqma-kVvd6-ELJ-TZrVWqofcQ")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(badPostDto)))
 			.andDo(print())
@@ -221,7 +226,9 @@ class PostControllerTest {
 	void deletePostByPostId() throws Exception {
 		// Then
 		mockMvc.perform(delete("/posts/{postId}" , 1L)
-			.sessionAttr("ID", 1L))
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIxIiwiZXhwIjoxNjEzNzQyODUzMjczfQ." +
+				"7kf4YpTo6TorkHSMVEKYz_jKKll1e7HR4CllHvtZXFxZ2ygIvOgDE13Mj_jYhyqma-kVvd6-ELJ-TZrVWqofcQ"))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -231,7 +238,9 @@ class PostControllerTest {
 	void deletePostByPostId_BadRequest_WrongUserId() throws Exception {
 		// Then
 		mockMvc.perform(delete("/posts/{postId}" , 1L)
-			.sessionAttr("ID", 2L))
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIzIiwiZXhwIjoxNjEzNzQyNDQ1MTU3fQ." +
+				"obNq1IlriYcqpMeytrV5oX4nqTxeb4rDXxz0_r0zYbJagC-Kjkxluer7KhfF_hRS36hE95cAe5ptiecOdl_lqQ"))
 			.andDo(print())
 			.andExpect(status().isNoContent());
 	}
@@ -241,7 +250,9 @@ class PostControllerTest {
 	void deletePostByPostId_BadRequest_WrongType() throws Exception {
 		// Then
 		mockMvc.perform(delete("/posts/{postId}" , "str")
-			.sessionAttr("ID", 1L))
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIxIiwiZXhwIjoxNjEzNzQyODUzMjczfQ." +
+				"7kf4YpTo6TorkHSMVEKYz_jKKll1e7HR4CllHvtZXFxZ2ygIvOgDE13Mj_jYhyqma-kVvd6-ELJ-TZrVWqofcQ"))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
@@ -251,7 +262,9 @@ class PostControllerTest {
 	void deletePostByPostId_NoContent() throws Exception {
 		// Then
 		mockMvc.perform(delete("/posts/{postId}" , 1213124415)
-			.sessionAttr("ID", 3L))
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIzIiwiZXhwIjoxNjEzNzQyNDQ1MTU3fQ." +
+				"obNq1IlriYcqpMeytrV5oX4nqTxeb4rDXxz0_r0zYbJagC-Kjkxluer7KhfF_hRS36hE95cAe5ptiecOdl_lqQ"))
 			.andDo(print())
 			.andExpect(status().isNoContent());
 	}
@@ -262,7 +275,9 @@ class PostControllerTest {
 
 		// Then
 		mockMvc.perform(put("/posts/{postId}" , 1L)
-			.sessionAttr("ID", 1L)
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIxIiwiZXhwIjoxNjEzNzQyODUzMjczfQ." +
+				"7kf4YpTo6TorkHSMVEKYz_jKKll1e7HR4CllHvtZXFxZ2ygIvOgDE13Mj_jYhyqma-kVvd6-ELJ-TZrVWqofcQ")
 			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
@@ -275,7 +290,9 @@ class PostControllerTest {
 
 		// Then
 		mockMvc.perform(put("/posts/{postId}" , 2L)
-			.sessionAttr("ID", 3L)
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIzIiwiZXhwIjoxNjEzNzQyNDQ1MTU3fQ." +
+				"obNq1IlriYcqpMeytrV5oX4nqTxeb4rDXxz0_r0zYbJagC-Kjkxluer7KhfF_hRS36hE95cAe5ptiecOdl_lqQ")
 			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
@@ -300,7 +317,9 @@ class PostControllerTest {
 
 		// Then
 		mockMvc.perform(put("/posts/{postId}" , "str")
-			.sessionAttr("ID", 1L)
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIxIiwiZXhwIjoxNjEzNzQyODUzMjczfQ." +
+				"7kf4YpTo6TorkHSMVEKYz_jKKll1e7HR4CllHvtZXFxZ2ygIvOgDE13Mj_jYhyqma-kVvd6-ELJ-TZrVWqofcQ")
 			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())
@@ -313,7 +332,9 @@ class PostControllerTest {
 
 		// Then
 		mockMvc.perform(put("/posts/{postId}", 1123241L)
-			.sessionAttr("ID", 1L)
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIxIiwiZXhwIjoxNjEzNzQyODUzMjczfQ." +
+				"7kf4YpTo6TorkHSMVEKYz_jKKll1e7HR4CllHvtZXFxZ2ygIvOgDE13Mj_jYhyqma-kVvd6-ELJ-TZrVWqofcQ")
 			.content(objectMapper.writeValueAsString(modifyDto))
 			.contentType(MediaType.APPLICATION_JSON))
 			.andDo(print())

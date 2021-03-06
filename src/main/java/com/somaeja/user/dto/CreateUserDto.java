@@ -34,7 +34,7 @@ public class CreateUserDto {
 		return User.builder()
 			.locationId(locationId)
 			.nickName(nickName)
-			.password(SHA256Utils.encode(password))
+			.password("{noop}"+SHA256Utils.encode(password))
 			.email(email)
 			.phoneNumber(phoneNumber)
 			.role(RoleStatus.USER)

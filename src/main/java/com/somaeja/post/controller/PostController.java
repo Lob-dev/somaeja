@@ -1,5 +1,7 @@
 package com.somaeja.post.controller;
 
+import com.somaeja.config.jwt.JwtFilter;
+import com.somaeja.config.jwt.JwtTokenProvider;
 import com.somaeja.post.controller.response.PostInfo;
 import com.somaeja.post.dto.CreatePostDto;
 import com.somaeja.post.dto.FindPostDto;
@@ -21,11 +23,13 @@ import java.util.List;
 public class PostController {
 
 	private final PostService postService;
+	private final JwtTokenProvider tokenProvider;
 
 	@PostMapping("/posts")
 	public ResponseEntity<PostInfo> createPostInfo(@Valid @RequestBody CreatePostDto postDto,
-												   @SessionAttribute("ID") Long userId) {
+												   @RequestHeader(JwtFilter.AUTHORIZATION_HEADER) String jwt) {
 		// Image files -> Stream -> resources / static / (여기에 저장)
+		Long userId = Long.valueOf(tokenProvider.getUserId(jwt));
 		Post post = postService.savePostInfo(postDto, userId);
 		return ResponseEntity.status(HttpStatus.CREATED).body(PostInfo.from(post.getId(), "post created!"));
 	}
@@ -77,14 +81,17 @@ public class PostController {
 	}
 
 	@DeleteMapping("/posts/{postId}")
-	public ResponseEntity<PostInfo> deletePostInfo(@PathVariable Long postId, @SessionAttribute("ID") Long userId) {
+	public ResponseEntity<PostInfo> deletePostInfo(@PathVariable Long postId,
+												   @RequestHeader(JwtFilter.AUTHORIZATION_HEADER) String jwt) {
+		Long userId = Long.valueOf(tokenProvider.getUserId(jwt));
 		postService.deletePostInfo(postId, userId);
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(postId, "post deleted!"));
 	}
 
 	@PutMapping("/posts/{postId}")
 	public ResponseEntity<PostInfo> changePostInfo(@PathVariable Long postId, @Valid @RequestBody ModifyPostDto modifyPostDto,
-												   @SessionAttribute("ID") Long userId) {
+												   @RequestHeader(JwtFilter.AUTHORIZATION_HEADER) String jwt) {
+		Long userId = Long.valueOf(tokenProvider.getUserId(jwt));
 		Post post = postService.changePostInfo(postId, userId, modifyPostDto);
 		return ResponseEntity.status(HttpStatus.OK).body(PostInfo.from(post.getId(), "post updated!"));
 	}

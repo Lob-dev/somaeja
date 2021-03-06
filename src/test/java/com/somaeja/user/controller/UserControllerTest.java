@@ -1,10 +1,12 @@
 package com.somaeja.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.somaeja.config.jwt.JwtFilter;
 import com.somaeja.user.dto.CreateUserDto;
 import com.somaeja.user.dto.ModifyProfilesDto;
 import com.somaeja.user.dto.SignInUserDto;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
 class UserControllerTest {
 
@@ -84,7 +86,9 @@ class UserControllerTest {
 	void userControllerTest_modifyEmail() throws Exception {
 
 		mockMvc.perform(patch("/users/profile")
-			.sessionAttr("ID", 1L)
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIxIiwiZXhwIjoxNjEzNzQyODUzMjczfQ." +
+				"7kf4YpTo6TorkHSMVEKYz_jKKll1e7HR4CllHvtZXFxZ2ygIvOgDE13Mj_jYhyqma-kVvd6-ELJ-TZrVWqofcQ")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(profilesDto)))
 			.andDo(print())
@@ -112,7 +116,9 @@ class UserControllerTest {
 	void userControllerTest_getUserProfile() throws Exception {
 
 		mockMvc.perform(get("/users/profile")
-			.sessionAttr("ID", 1L))
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+				"eyJzdWIiOiIxIiwiZXhwIjoxNjEzNzQyODUzMjczfQ." +
+				"7kf4YpTo6TorkHSMVEKYz_jKKll1e7HR4CllHvtZXFxZ2ygIvOgDE13Mj_jYhyqma-kVvd6-ELJ-TZrVWqofcQ"))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -121,7 +127,9 @@ class UserControllerTest {
 	void userControllerTest_softDeleteOfUser() throws Exception {
 
 		mockMvc.perform(delete("/users/{userId}", 3L)
-			.sessionAttr("ID", 3L))
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+					"eyJzdWIiOiIzIiwiZXhwIjoxNjEzNzQyNDQ1MTU3fQ." +
+					"obNq1IlriYcqpMeytrV5oX4nqTxeb4rDXxz0_r0zYbJagC-Kjkxluer7KhfF_hRS36hE95cAe5ptiecOdl_lqQ"))
 			.andDo(print())
 			.andExpect(status().isNoContent());
 	}
@@ -130,7 +138,9 @@ class UserControllerTest {
 	void userControllerTest_softDeleteOfUser_notFounds() throws Exception {
 
 		mockMvc.perform(delete("/users/{userId}", 24124124124L)
-			.sessionAttr("ID", 1L))
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+					"eyJzdWIiOiIxIiwiZXhwIjoxNjEzNzQyODUzMjczfQ." +
+					"7kf4YpTo6TorkHSMVEKYz_jKKll1e7HR4CllHvtZXFxZ2ygIvOgDE13Mj_jYhyqma-kVvd6-ELJ-TZrVWqofcQ"))
 			.andDo(print())
 			.andExpect(status().isBadRequest());
 	}
@@ -139,7 +149,9 @@ class UserControllerTest {
 	void userControllerTest_restoreOfUser() throws Exception {
 
 		mockMvc.perform(delete("/users/{userId}", 4L)
-			.sessionAttr("ID", 4L))
+			.header(JwtFilter.AUTHORIZATION_HEADER, "eyJhbGciOiJIUzUxMiJ9." +
+					"eyJzdWIiOiI0IiwiZXhwIjoxNjEzNzQzMTYyMjk1fQ." +
+					"z_8G_n83ZP1yg2OWEleu5eKNwkgrRGw9uQnUrKiSHaFbPQMeJjr_2TyApdXY6Gx6wkIpkjP4ZLOhE4WFV_h2Aw"))
 			.andDo(print())
 			.andExpect(status().isNoContent());
 
@@ -162,6 +174,13 @@ class UserControllerTest {
 		mockMvc.perform(post("/users/sign-in")
 			.content(objectMapper.writeValueAsString(signInUserDto))
 			.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(status().isOk());
+
+		mockMvc.perform(get("/users/profile")
+			.header(JwtFilter.AUTHORIZATION_HEADER, "Bearer eyJhbGciOiJIUzUxMiJ9" +
+				".eyJzdWIiOiIzIiwiaWF0IjoxNjEzNzkzMDk3LCJleHAiOjE2MTM4Nzk0OTcwMTl9" +
+				".mf_X4pezsykgqVW2FlzlqgNsvydZ5w6KzyAsUPj8hraf_QOMB0cPB_5ygVHLZmlG2nal0Cgn1LuO5-r_1zh7Uw"))
 			.andDo(print())
 			.andExpect(status().isOk());
 	}
@@ -191,6 +210,7 @@ class UserControllerTest {
 	}
 
 	@Test
+	@Disabled
 	void userControllerTest_signOut() throws Exception {
 
 		mockMvc.perform(get("/users/sign-out"))

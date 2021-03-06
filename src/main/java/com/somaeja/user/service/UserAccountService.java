@@ -1,45 +1,64 @@
 package com.somaeja.user.service;
 
+import com.somaeja.config.jwt.JwtTokenProvider;
 import com.somaeja.user.dto.SignInUserDto;
 import com.somaeja.user.dto.UserInfo;
 import com.somaeja.user.exception.UserInfoNotFoundException;
 import com.somaeja.user.mapper.UserMapper;
 import com.somaeja.user.utils.SHA256Utils;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserAccountService {
+public class UserAccountService implements UserDetailsService {
 
 	private final UserMapper userMapper;
+	private final JwtTokenProvider tokenProvider;
 
-	public void signIn(SignInUserDto userDto, HttpSession session) {
+	public String signIn(SignInUserDto userDto) {
 
-		UserInfo user = userMapper.findByEmailAndPassword(userDto.getEmail(), SHA256Utils.encode(userDto.getEmail()));
-		if (ObjectUtils.isEmpty(user)) {
+		UserInfo info = userMapper.findByEmailAndPassword(userDto.getEmail(),
+			"{noop}" + SHA256Utils.encode(userDto.getPassword()));
+
+		if (ObjectUtils.isEmpty(info)) {
 			log.info("user information find failed");
 
 			throw new UserInfoNotFoundException("user information find failed");
 		}
-
-		setupSession(session, user);
+		return tokenProvider.createToken(info.getId());
 	}
 
-	public void signOut(HttpSession session) {
-		session.invalidate();
+
+	@Override
+	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+
+		com.somaeja.user.entity.User user = userMapper.findById(Long.valueOf(userId));
+		if (ObjectUtils.isEmpty(user)) {
+			log.info("User Info Not Found : User information could not be found in the database. : User userId = {}", userId);
+			throw new UserInfoNotFoundException("User Info Not Found :" + userId);
+		}
+		return createUser(userId, user.getRole().toString());
 	}
 
-	private void setupSession(HttpSession session, UserInfo user) {
-		session.setAttribute("ID", user.getId());
-		session.setAttribute("ROLE", user.getRole());
-		session.setMaxInactiveInterval(5 * 60);
+	private User createUser(String userId, String role) {
+
+		List<GrantedAuthority> grantedAuthorities = new ArrayList<>(Collections.singleton(new SimpleGrantedAuthority(role)));
+
+		return new User(userId, "", grantedAuthorities);
 	}
 
 }
